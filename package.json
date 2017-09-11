@@ -1,0 +1,13 @@
+{
+    "name"         : "node-red-contrib-homee",
+    "version"      : "0.0.1",
+    "description"  : "A node to communicate with your Homee",
+    "dependencies": {
+    },
+    "keywords": [ "node-red" ],
+    "node-red"     : {
+        "nodes": {
+            "homee": "homee.js"
+        }
+    }
+}
