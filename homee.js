@@ -1,14 +1,34 @@
+var Homee = require(./lib/homee.js);
+
 module.exports = function(RED) {
-  function HomeeNode(config) {
-    RED.nodes.createNode(this,config);
-    var node = this;
+    function HomeeNode(config) {
+        RED.nodes.createNode(this, config);
+        var node = this;
 
-    //this.homee = new Homee
+        var homee = new Homee(config.host, this.credentials.user, this.credentials.pass);
+    
+        homee.connect().then(function () {
+            node.log('connected to homee');
+            node.status({fill: 'green', shape: 'dot', text: 'connected'});
+            homee.listen(function (message) {
+                node.send({
+                    payload: message
+                });
+            });
+        }).catch(function (err) {
+            node.log.error(err);
+            node.status({fill: 'red', shape: 'dot', text: 'error'});
+        });
 
-    this.on('input', function(msg) {
-      msg.payload = msg.payload.toLowerCase();
-      node.send(msg);
+        this.on('input', function(msg) {
+            homee.send(msg.payload);
+        });
+    }
+  
+    RED.nodes.registerType("homee", HomeeNode, {
+        credentials: {
+            user: {type:"text"},
+            pass: {type:"password"}
+        }
     });
-  }
-  RED.nodes.registerType("homee", HomeeNode);
 }

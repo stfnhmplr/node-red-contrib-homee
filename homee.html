@@ -1,15 +1,20 @@
 <script type="text/javascript">
-    RED.nodes.registerType('homee',{
+    RED.nodes.registerType('homee', {
         category: 'input',
         color: '#a6bbcf',
         defaults: {
-            name: {value:""}
+            name: {value: ''},
+            host: {value: ''}
         },
-        inputs:0,
+        credentials: {
+            user: {type: 'text'},
+            pass: {type: 'password'}
+        },
+        inputs:1,
         outputs:1,
-        icon: "homee-logo.png",
+        icon: 'homee-logo.png',
         label: function() {
-            return this.name||"Homee";
+            return this.name || 'homee';
         }
     });
 </script>
@@ -19,8 +24,24 @@
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
+    <div class="form-row">
+        <label for="node-input-host"><i class="fa fa-globe"></i> IP/Host</label>
+        <input type="text" id="node-input-host" placeholder="IP">
+    </div>
+    <div class="form-row">
+        <label for="node-input-user"><i class="fa fa-user"></i> Username</label>
+        <input type="text" id="node-input-user" placeholder="username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-pass"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-input-pass">
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="homee">
-    <p>A simple node that converts the message payloads into all lower-case characters</p>
+    <p>A node to communicate with homee</p>
+    <p><strong>Name:</strong> Whatever you want!</p>
+    <p><strong>Host:</strong> IP-Adress from homee</p>
+    <p><strong>Username:</strong> Your username</p>
+    <p><strong>Password:</strong> Your password</p>
 </script>
