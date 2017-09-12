@@ -1,4 +1,4 @@
-var Homee = require(./lib/homee.js);
+var Homee = require('./lib/homee.js');
 
 module.exports = function(RED) {
     function HomeeNode(config) {
@@ -6,7 +6,7 @@ module.exports = function(RED) {
         var node = this;
 
         var homee = new Homee(config.host, this.credentials.user, this.credentials.pass);
-    
+
         homee.connect().then(function () {
             node.log('connected to homee');
             node.status({fill: 'green', shape: 'dot', text: 'connected'});
@@ -24,7 +24,7 @@ module.exports = function(RED) {
             homee.send(msg.payload);
         });
     }
-  
+
     RED.nodes.registerType("homee", HomeeNode, {
         credentials: {
             user: {type:"text"},
