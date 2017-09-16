@@ -23,6 +23,10 @@ module.exports = function(RED) {
         this.on('input', function(msg) {
             homee.send(msg.payload);
         });
+
+        this.on('close', function () {
+            homee.disconnect();
+        });
     }
 
     RED.nodes.registerType("homee", HomeeNode, {
