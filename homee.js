@@ -1,4 +1,4 @@
-var Homee = require('./lib/homee.js');
+var Homee = require('homee-api');
 
 module.exports = function(RED) {
     function HomeeNode(config) {
@@ -10,15 +10,14 @@ module.exports = function(RED) {
         homee.connect().then(function () {
             node.log('connected to homee');
             node.status({fill: 'green', shape: 'dot', text: 'connected'});
-            homee.listen(function (message) {
-                node.send({
-                    payload: message
-                });
-            });
         }).catch(function (err) {
             node.log.error(err);
             node.status({fill: 'red', shape: 'dot', text: 'error'});
         });
+
+        homee.on('message', function (message) {
+            node.send({ payload: message });
+        })
 
         this.on('input', function(msg) {
             homee.send(msg.payload);
@@ -26,6 +25,8 @@ module.exports = function(RED) {
 
         this.on('close', function () {
             homee.disconnect();
+            node.status({fill: 'red', shape: 'dot', text: 'not connected'});
+            node.log('homee: connection closed')
         });
     }
 

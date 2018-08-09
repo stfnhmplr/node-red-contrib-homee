@@ -1,14 +1,15 @@
 {
-    "name"         : "node-red-contrib-homee",
-    "version"      : "0.0.2",
-    "description"  : "access the homee api with node-red",
+    "name": "node-red-contrib-homee",
+    "version": "0.1.0",
+    "description": "access the homee api with node-red",
     "dependencies": {
-        "crypto-toolkit": "^1.0.0",
-        "request": "^2.79.0",
-        "ws": "^1.1.1"
+        "homee-api": "^0.9.8"
     },
-    "keywords": [ "node-red", "homee" ],
-    "node-red"     : {
+    "keywords": [
+        "node-red",
+        "homee"
+    ],
+    "node-red": {
         "nodes": {
             "homee": "homee.js"
         }
