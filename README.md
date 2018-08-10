@@ -8,6 +8,8 @@ cd ~/.node-red
 npm install node-red-contrib-homee
 ```
 
+Alternatively you could use [**homeean**](https://homeean.de) to install node-red-contrib-homee (including Node-RED) on a Raspberry Pi with a plain vanilla Raspbian installation. homeean is a web based buildtool, which generates an individual buildscript (Bash-Script) for user selected Smart Home Tools to be installed on a Raspberry Pi running on Raspbian. node-red-contrib-homee (including its dependecy Node-RED) is provided as an homeean install option.
+
 ## Usage
 The node creates a websocket connection to homee. First set the IP, username and password in the configuration of the node.
 
