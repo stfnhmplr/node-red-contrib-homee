@@ -26,6 +26,8 @@ module.exports = function(RED) {
         })
 
         homee.on('message', function (message) {
+            node.context().global.set('homee.nodes', homee.nodes);
+            node.context().global.set('homee.groups', homee.groups);
             node.send({ payload: message });
         })
 
