@@ -1,6 +1,6 @@
 <script type="text/javascript">
     RED.nodes.registerType('homee', {
-        category: 'function',
+        category: 'config',
         color: '#a6bbcf',
         defaults: {
             name: {value: ''},
@@ -10,9 +10,6 @@
             user: {type: 'text'},
             pass: {type: 'password'}
         },
-        inputs:1,
-        outputs:1,
-        icon: 'homee-logo.png',
         label: function() {
             return this.name || 'homee';
         }
@@ -21,20 +18,20 @@
 
 <script type="text/x-red" data-template-name="homee">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-host"><i class="fa fa-globe"></i> IP/Host</label>
-        <input type="text" id="node-input-host" placeholder="IP">
+        <label for="node-config-input-host"><i class="fa fa-globe"></i> IP/Host</label>
+        <input type="text" id="node-config-input-host" placeholder="IP">
     </div>
     <div class="form-row">
-        <label for="node-input-user"><i class="fa fa-user"></i> Username</label>
-        <input type="text" id="node-input-user" placeholder="username">
+        <label for="node-config-input-user"><i class="fa fa-user"></i> Username</label>
+        <input type="text" id="node-config-input-user" placeholder="username">
     </div>
     <div class="form-row">
-        <label for="node-input-pass"><i class="fa fa-key"></i> Password</label>
-        <input type="password" id="node-input-pass">
+        <label for="node-config-input-pass"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-config-input-pass">
     </div>
 </script>
 

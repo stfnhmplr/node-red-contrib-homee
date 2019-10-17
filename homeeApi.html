@@ -1,0 +1,22 @@
+<script type="text/javascript">
+    RED.nodes.registerType('homeeApi', {
+        category: 'homee',
+        color: '#a6bbcf',
+        defaults: {
+            homee: {value: '', type: 'homee'}
+        },
+        icon: 'homee-logo.png',
+        inputs:1,
+        outputs:1,
+        label: function() {
+            return this.name || 'homeeApi';
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="homeeApi">
+    <div class="form-row">
+        <label for="node-input-homee"><i class="icon-tag"></i> homee</label>
+        <input type="text" id="node-input-homee" placeholder="homee">
+    </div>
+</script>

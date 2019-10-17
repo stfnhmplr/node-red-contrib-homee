@@ -3,7 +3,7 @@
     "version": "0.2.1",
     "description": "access the homee api with node-red",
     "dependencies": {
-        "homee-api": "^0.10.0"
+        "homee-api": "^0.12.0"
     },
     "keywords": [
         "node-red",
@@ -11,7 +11,8 @@
     ],
     "node-red": {
         "nodes": {
-            "homee": "homee.js"
+            "homee": "homee.js",
+            "homeeApi": "homeeApi.js"
         }
     }
 }
