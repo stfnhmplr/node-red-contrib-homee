@@ -1,0 +1,70 @@
+<script type="text/javascript">
+    RED.nodes.registerType('homeeDevice', {
+        category: 'homee',
+        color: '#a6bbcf',
+        defaults: {
+            'homee-sim': {value: '', type: 'virtualHomee'},
+            'name': {value: '', required: true},
+            'nodeId': {value: '', validate: RED.validators.number()},
+            'profile': {value: '', validate: RED.validators.number()},
+            'attributes': {value: '', validate: RED.validators.typedInput('json')}
+        },
+        icon: 'homee-logo.png',
+        inputs: 1,
+        outputs: 1,
+        label: function() {
+            return this.name || 'homeeDevice';
+        },
+        oneditprepare: async function () {
+          $("#node-input-attributes").typedInput({
+            default: 'json',
+            types: ['json']
+          });
+
+          const res = await fetch('/homee-api/enums');
+          enums = await res.json();
+
+          for (profile in enums.CANodeProfile) {
+            const option = document.createElement('option')
+            option.setAttribute('value', enums.CANodeProfile[profile])
+            option.appendChild(document.createTextNode(profile.replace('CANodeProfile', '')));
+
+            document.querySelector('#device-profiles').appendChild(option)
+          }
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="homeeDevice">
+    <div class="form-row">
+        <label for="node-input-homee-sim"><i class="fa fa-cube"></i> virtualHomee</label>
+        <input type="text" id="node-input-homee-sim" placeholder="homee" style="width: 70%">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="homeeDevice" style="width: 70%">
+    </div>
+    <div class="form-row">
+        <label for="node-input-nodeId"><i class="fa fa-hashtag"></i> Node-ID</label>
+        <input type="number" id="node-input-nodeId" placeholder="Node-ID" style="width: 70%">
+    </div>
+    <div class="form-row">
+        <label for="node-input-profile"><i class="fa fa-id-badge"></i> Profile</label>
+        <input type="text" id="node-input-profile" style="width: 70%" list="device-profiles">
+        <datalist id="device-profiles">
+        </datalist>
+    </div>
+    <div class="form-row">
+        <label for="node-input-attributes"><i class="fa fa-shopping"></i> Attributes</label>
+        <input type="text" id="node-input-attributes" style="width:70%">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="homeeDevice">
+    <p>Simulates a homee device</p>
+    <p><strong>virtualHomee:</strong> Choose or create your virtual Homee</p>
+    <p><strong>Name:</strong> Name your device. This name shows up in homee</p>
+    <p><strong>Node-ID:</strong> Specify a Node-ID. This must be unique.</p>
+    <p><strong>Profile:</strong> Choose a profile for your device</p>
+    <p><strong>Attributes:</strong> Add some attributes to your device</p>
+</script>
