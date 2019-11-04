@@ -3,8 +3,10 @@
     "version": "0.3.0-beta.0",
     "description": "access the homee api with node-red",
     "scripts": {
+        "start": "node node_modules/node-red/red.js -v -u .",
         "lint": "./node_modules/.bin/eslint .",
-        "lint:fix": "npm run lint -- --fix"
+        "lint:fix": "npm run lint -- --fix",
+        "test": "mocha \"test/**/*_spec.js\""
     },
     "keywords": [
         "node-red",
@@ -22,7 +24,9 @@
     "devDependencies": {
         "eslint": "^6.6.0",
         "eslint-config-airbnb-base": "^14.0.0",
-        "eslint-plugin-import": "^2.18.2"
+        "eslint-plugin-import": "^2.18.2",
+        "node-red": "^1.0.2",
+        "node-red-node-test-helper": "^0.2.3"
     },
     "node-red": {
         "nodes": {
@@ -32,11 +36,14 @@
             "homeeDevice": "nodes/homeeDevice.js"
         }
     },
+    "engines": {
+        "node": ">=10.0.0"
+    },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/stfnhmplr/node-red-contrib-homee.git"
+        "type": "git",
+        "url": "git+https://github.com/stfnhmplr/node-red-contrib-homee.git"
     },
     "bugs": {
-      "url": "https://github.com/stfnhmplr/homee-api/issues"
+        "url": "https://github.com/stfnhmplr/homee-api/issues"
     }
 }

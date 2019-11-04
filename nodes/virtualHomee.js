@@ -1,16 +1,13 @@
 const enums = require('homee-api/lib/enums');
 const VirtualHomee = require('../lib/virtualHomee');
 const discovery = require('../lib/discovery');
+const icons = require('../lib/icons');
 
 // eslint-disable-next-line
 module.exports = function (RED) {
   function VirtualHomeeNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
-
-    RED.httpAdmin.get('/homee-api/enums', (req, res) => {
-      res.send(enums);
-    });
 
     this.api = new VirtualHomee(config.name, this.credentials.user, this.credentials.pass);
 
@@ -22,15 +19,35 @@ module.exports = function (RED) {
       done();
     });
 
+
+    this.api.on('PUT:attributes', (attributeId, deviceId, targetValue) => {
+      let deviceNode;
+
+      try {
+        deviceNode = RED.nodes.getNode(this.attributeMap[attributeId]);
+      } catch (e) {
+        node.error(e);
+        return;
+      }
+
+      deviceNode.updateAttribute(attributeId, targetValue);
+      deviceNode.send({
+        payload: { attributeId, targetValue },
+      });
+    });
+
     // TODO: change this to RED.events.on('nodes-started')
     setTimeout(() => {
       this.devices = [];
+      this.attributeMap = {};
+      this.childNodes = {};
 
       node.debug('discovering devices');
       RED.nodes.eachNode((n) => {
         if (n.type === 'homeeDevice') {
           const deviceNode = RED.nodes.getNode(n.id);
           this.devices.push(deviceNode.device);
+          deviceNode.device.attributes.forEach((a) => { this.attributeMap[a.id] = n.id; });
           deviceNode.status({ fill: 'green', shape: 'dot', text: 'online' });
         }
       });
@@ -71,6 +88,14 @@ module.exports = function (RED) {
       return !doubleAttributeIds.length;
     };
   }
+
+  RED.httpAdmin.get('/homee-api/enums', (req, res) => {
+    res.send(enums);
+  });
+
+  RED.httpAdmin.get('/homee-api/icons', (req, res) => {
+    res.send(icons);
+  });
 
   RED.nodes.registerType('virtualHomee', VirtualHomeeNode, {
     credentials: {

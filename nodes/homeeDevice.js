@@ -6,21 +6,22 @@ module.exports = function (RED) {
     RED.nodes.createNode(this, config);
 
     const node = this;
+    let attributes = [];
 
-    this.device = new Device(config.name, config.nodeId, config.profile, config.attributes);
+    try {
+      attributes = JSON.parse(config.attributes);
+    } catch (e) {
+      node.error('Can\'t parse attributes. Please check your JSON Syntax');
+    }
+
+    const invalidAttributes = attributes.filter((a) => a.node_id !== parseInt(config.nodeId, 10));
+    if (invalidAttributes.length) {
+      node.error('The node id of at least one attribute does not match the device node id');
+    }
+
+    this.device = new Device(config.name, config.nodeId, config.profile, attributes, config.icon);
 
     const virtualHomeeNode = RED.nodes.getNode(config['homee-sim']);
-
-    // new value via api
-    virtualHomeeNode.api.on('PUT:attributes', (attributeId, nodeId, targetValue) => {
-      if (!this.device.attributes.find((a) => a.id === attributeId)) return;
-
-      this.updateAttribute(attributeId, targetValue);
-
-      node.send({
-        payload: { attributeId, targetValue },
-      });
-    });
 
     // new value from flow
     this.on('input', (msg) => {
