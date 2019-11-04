@@ -26,7 +26,7 @@ module.exports = function (RED) {
     this.homee.connect().then(() => {
       node.log('connected to homee');
     }).catch((err) => {
-      node.log.error(err);
+      node.error(err);
     });
 
     this.on('close', () => {
