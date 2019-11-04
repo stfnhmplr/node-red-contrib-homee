@@ -7,6 +7,7 @@
             'name': {value: '', required: true},
             'nodeId': {value: '', validate: RED.validators.number()},
             'profile': {value: '', validate: RED.validators.number()},
+            'icon': {value: 'default'},
             'attributes': {value: '', validate: RED.validators.typedInput('json')}
         },
         icon: 'homee-logo.png',
@@ -21,8 +22,8 @@
             types: ['json']
           });
 
-          const res = await fetch('/homee-api/enums');
-          enums = await res.json();
+          const res1 = await fetch('/homee-api/enums');
+          const enums = await res1.json();
 
           for (profile in enums.CANodeProfile) {
             const option = document.createElement('option')
@@ -30,6 +31,18 @@
             option.appendChild(document.createTextNode(profile.replace('CANodeProfile', '')));
 
             document.querySelector('#device-profiles').appendChild(option)
+          }
+
+          const res2 = await fetch('/homee-api/icons');
+          const icons = await res2.json();
+
+          for (icon in icons) {
+
+            const option = document.createElement('option')
+            option.setAttribute('value', icon)
+            option.appendChild(document.createTextNode(icons[icon]));
+
+            document.querySelector('#device-icons').appendChild(option)
           }
         }
     });
@@ -51,8 +64,12 @@
     <div class="form-row">
         <label for="node-input-profile"><i class="fa fa-id-badge"></i> Profile</label>
         <input type="text" id="node-input-profile" style="width: 70%" list="device-profiles">
-        <datalist id="device-profiles">
-        </datalist>
+        <datalist id="device-profiles"></datalist>
+    </div>
+    <div class="form-row">
+        <label for="node-input-icon"><i class="fa fa-id-badge"></i> Icon</label>
+        <input type="text" id="node-input-icon" style="width: 70%" list="device-icons" placeholder="default">
+        <datalist id="device-icons"></datalist>
     </div>
     <div class="form-row">
         <label for="node-input-attributes"><i class="fa fa-shopping"></i> Attributes</label>
@@ -62,9 +79,10 @@
 
 <script type="text/x-red" data-help-name="homeeDevice">
     <p>Simulates a homee device</p>
-    <p><strong>virtualHomee:</strong> Choose or create your virtual Homee</p>
-    <p><strong>Name:</strong> Name your device. This name shows up in homee</p>
+    <p><strong>virtualHomee:</strong> Choose or create your virtual Homee.</p>
+    <p><strong>Name:</strong> Name your device. This name shows up in homee.</p>
     <p><strong>Node-ID:</strong> Specify a Node-ID. This must be unique.</p>
-    <p><strong>Profile:</strong> Choose a profile for your device</p>
-    <p><strong>Attributes:</strong> Add some attributes to your device</p>
+    <p><strong>Profile:</strong> Choose a profile for your device.</p>
+    <p><strong>Icon:</strong> Choose an icon for your device or leave it at default.</p>
+    <p><strong>Attributes:</strong> Add some attributes to your device. Must be an Array of Objects.</p>
 </script>
