@@ -46,6 +46,11 @@ module.exports = function (RED) {
       RED.nodes.eachNode((n) => {
         if (n.type === 'homeeDevice') {
           const deviceNode = RED.nodes.getNode(n.id);
+          if (!deviceNode) {
+            node.error(`Can't find node ${n.id}`);
+            return;
+          }
+
           this.devices.push(deviceNode.device);
           deviceNode.device.attributes.forEach((a) => { this.attributeMap[a.id] = n.id; });
           deviceNode.status({ fill: 'green', shape: 'dot', text: 'online' });

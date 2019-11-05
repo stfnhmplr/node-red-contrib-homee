@@ -10,8 +10,9 @@ module.exports = function (RED) {
 
     try {
       attributes = JSON.parse(config.attributes);
+      if (!Array.isArray(attributes)) throw new Error('Attributes must be an array');
     } catch (e) {
-      node.error('Can\'t parse attributes. Please check your JSON Syntax');
+      node.error(`Can't parse attributes. Please check your JSON syntax: ${e}`);
     }
 
     const invalidAttributes = attributes.filter((a) => a.node_id !== parseInt(config.nodeId, 10));
