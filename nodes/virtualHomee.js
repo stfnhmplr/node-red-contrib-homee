@@ -65,7 +65,7 @@ module.exports = function (RED) {
         node.error('The device IDs and the attribute IDs must be unique');
       }
 
-      node.debug(`found ${this.devices.length} devices`);
+      node.debug(`found ${this.devices.length - 1} devices`);
 
       this.api.setNodes(this.devices);
 
