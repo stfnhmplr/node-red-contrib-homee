@@ -1,5 +1,6 @@
 const enums = require('homee-api/lib/enums');
 const VirtualHomee = require('../lib/virtualHomee');
+const Device = require('../lib/device');
 const discovery = require('../lib/discovery');
 const icons = require('../lib/icons');
 
@@ -41,6 +42,9 @@ module.exports = function (RED) {
       this.devices = [];
       this.attributeMap = {};
       this.childNodes = {};
+
+      const homeeNode = new Device('homee', -1, 1, [], 'default');
+      this.devices.push(homeeNode);
 
       node.debug('discovering devices');
       RED.nodes.eachNode((n) => {
