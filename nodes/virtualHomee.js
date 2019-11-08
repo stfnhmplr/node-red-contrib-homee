@@ -1,5 +1,6 @@
 const enums = require('homee-api/lib/enums');
 const VirtualHomee = require('../lib/virtualHomee');
+const Device = require('../lib/device');
 const discovery = require('../lib/discovery');
 const icons = require('../lib/icons');
 
@@ -45,11 +46,14 @@ module.exports = function (RED) {
 
     // TODO: change this to RED.events.on('nodes-started')
     setTimeout(() => {
+      const homeeNode = new Device('homee', -1, 1, [], 'default');
+      this.devices.push(homeeNode);
+
       if (!this.checkDeviceIds() || !this.checkAttributeIds()) {
         node.error('The device IDs and the attribute IDs must be unique');
       }
 
-      node.debug(`found ${this.devices.length} devices`);
+      node.debug(`found ${this.devices.length - 1} devices`);
 
       this.api.setNodes(this.devices);
 
