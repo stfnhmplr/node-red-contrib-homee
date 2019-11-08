@@ -11,6 +11,15 @@ module.exports = function (RED) {
 
     this.api = new VirtualHomee(config.name, this.credentials.user, this.credentials.pass);
 
+    this.devices = [];
+    this.attributeMap = {};
+
+    this.registerDevice = (nodeId, device, callback) => {
+      this.devices.push(device);
+      device.attributes.forEach((a) => { this.attributeMap[a.id] = nodeId; });
+      if (typeof callback === 'function') callback();
+    };
+
     this.on('close', async (done) => {
       await discovery.stop();
       node.debug('closed udp server');
@@ -31,32 +40,11 @@ module.exports = function (RED) {
       }
 
       deviceNode.updateAttribute(attributeId, targetValue);
-      deviceNode.send({
-        payload: { attributeId, targetValue },
-      });
+      deviceNode.send({ payload: { attributeId, targetValue } });
     });
 
     // TODO: change this to RED.events.on('nodes-started')
     setTimeout(() => {
-      this.devices = [];
-      this.attributeMap = {};
-      this.childNodes = {};
-
-      node.debug('discovering devices');
-      RED.nodes.eachNode((n) => {
-        if (n.type === 'homeeDevice') {
-          const deviceNode = RED.nodes.getNode(n.id);
-          if (!deviceNode) {
-            node.error(`Can't find node ${n.id}`);
-            return;
-          }
-
-          this.devices.push(deviceNode.device);
-          deviceNode.device.attributes.forEach((a) => { this.attributeMap[a.id] = n.id; });
-          deviceNode.status({ fill: 'green', shape: 'dot', text: 'online' });
-        }
-      });
-
       if (!this.checkDeviceIds() || !this.checkAttributeIds()) {
         node.error('The device IDs and the attribute IDs must be unique');
       }
