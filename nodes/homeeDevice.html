@@ -3,7 +3,7 @@
         category: 'homee',
         color: '#a6bbcf',
         defaults: {
-            'homee-sim': {value: '', type: 'virtualHomee'},
+            'virtual-homee': {value: '', type: 'virtualHomee'},
             'name': {value: '', required: true},
             'nodeId': {value: '', validate: RED.validators.number()},
             'profile': {value: '', validate: RED.validators.number()},
@@ -50,8 +50,8 @@
 
 <script type="text/x-red" data-template-name="homeeDevice">
     <div class="form-row">
-        <label for="node-input-homee-sim"><i class="fa fa-cube"></i> virtualHomee</label>
-        <input type="text" id="node-input-homee-sim" placeholder="homee" style="width: 70%">
+        <label for="node-input-virtual-homee"><i class="fa fa-cube"></i> virtualHomee</label>
+        <input type="text" id="node-input-virtual-homee" placeholder="homee" style="width: 70%">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
