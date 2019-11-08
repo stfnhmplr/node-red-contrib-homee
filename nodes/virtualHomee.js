@@ -29,7 +29,6 @@ module.exports = function (RED) {
       done();
     });
 
-
     this.api.on('PUT:attributes', (attributeId, deviceId, targetValue) => {
       let deviceNode;
 
@@ -46,6 +45,7 @@ module.exports = function (RED) {
 
     // TODO: change this to RED.events.on('nodes-started')
     setTimeout(() => {
+      // homee expects one homee node
       const homeeNode = new Device('homee', -1, 1, [], 'default');
       this.devices.push(homeeNode);
 
@@ -54,7 +54,6 @@ module.exports = function (RED) {
       }
 
       node.debug(`found ${this.devices.length - 1} devices`);
-
       this.api.setNodes(this.devices);
 
       node.debug('starting udp server');
@@ -86,13 +85,8 @@ module.exports = function (RED) {
     };
   }
 
-  RED.httpAdmin.get('/homee-api/enums', (req, res) => {
-    res.send(enums);
-  });
-
-  RED.httpAdmin.get('/homee-api/icons', (req, res) => {
-    res.send(icons);
-  });
+  RED.httpAdmin.get('/homee-api/enums', (req, res) => res.send(enums));
+  RED.httpAdmin.get('/homee-api/icons', (req, res) => res.send(icons));
 
   RED.nodes.registerType('virtualHomee', VirtualHomeeNode, {
     credentials: {
