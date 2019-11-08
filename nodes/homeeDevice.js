@@ -4,25 +4,32 @@ const Device = require('../lib/device');
 module.exports = function (RED) {
   function HomeeDeviceNode(config) {
     RED.nodes.createNode(this, config);
-
     const node = this;
-    let attributes = [];
+
+    this.icon = config.icon;
+    this.name = config.name;
+    this.nodeId = parseInt(config.nodeId, 10);
+    this.profile = parseInt(config.profile, 10);
 
     try {
-      attributes = JSON.parse(config.attributes);
-      if (!Array.isArray(attributes)) throw new Error('Attributes must be an array');
+      this.attributes = JSON.parse(config.attributes);
+      if (!Array.isArray(this.attributes)) throw new Error('Attributes must be an array');
+
+      const invalidAttributes = this.attributes.filter((a) => a.node_id !== this.nodeId);
+      if (invalidAttributes.length) {
+        throw new Error('The node id of at least one attribute does not match the device node id');
+      }
+
+      this.device = new Device(this.name, this.nodeId, this.profile, this.attributes, this.icon);
+
+      this.virtualHomeeNode = RED.nodes.getNode(config['virtual-homee']);
+      this.virtualHomeeNode.registerDevice(this.id, this.device, () => {
+        this.status({ fill: 'green', shape: 'dot', text: 'registered' });
+      });
     } catch (e) {
-      node.error(`Can't parse attributes. Please check your JSON syntax: ${e}`);
+      this.status({ fill: 'red', shape: 'dot', text: 'error' });
+      this.error(e);
     }
-
-    const invalidAttributes = attributes.filter((a) => a.node_id !== parseInt(config.nodeId, 10));
-    if (invalidAttributes.length) {
-      node.error('The node id of at least one attribute does not match the device node id');
-    }
-
-    this.device = new Device(config.name, config.nodeId, config.profile, attributes, config.icon);
-
-    const virtualHomeeNode = RED.nodes.getNode(config['homee-sim']);
 
     // new value from flow
     this.on('input', (msg) => {
@@ -34,9 +41,7 @@ module.exports = function (RED) {
       this.updateAttribute(msg.payload.id, msg.payload.value);
     });
 
-    this.on('close', () => {
-      node.status({ fill: 'red', shape: 'dot', text: 'offline' });
-    });
+    this.on('close', () => node.status({ fill: 'red', shape: 'dot', text: 'offline' }));
 
     /**
      * update attribute
@@ -45,7 +50,7 @@ module.exports = function (RED) {
      * @return {void}
      */
     this.updateAttribute = (id, value) => {
-      const attribute = this.device.attributes.find((a) => a.id === id);
+      const attribute = this.attributes.find((a) => a.id === id);
 
       if (!attribute) {
         node.warn(`Can't find attribute with id ${id}`);
@@ -67,12 +72,12 @@ module.exports = function (RED) {
 
       // first update target value only
       attribute.target_value = value;
-      virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+      this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
 
       // next update current_value
       attribute.last_value = value;
       attribute.current_value = value;
-      virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+      this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
     };
   }
 
