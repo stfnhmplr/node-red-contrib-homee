@@ -5,10 +5,10 @@
         defaults: {
             'virtual-homee': {value: '', type: 'virtualHomee'},
             'name': {value: '', required: true},
-            'nodeId': {value: '', validate: RED.validators.number()},
-            'profile': {value: '', validate: RED.validators.number()},
+            'nodeId': {value: '', validate: RED.validators.number(), required: true},
+            'profile': {value: '', validate: RED.validators.number(), required: true},
             'icon': {value: 'default'},
-            'attributes': {value: '', validate: RED.validators.typedInput('json')}
+            'attributes': {value: '', validate: RED.validators.typedInput('json'), required: true}
         },
         icon: 'homee-logo.png',
         inputs: 1,
