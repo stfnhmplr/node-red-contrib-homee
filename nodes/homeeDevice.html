@@ -30,7 +30,7 @@
             option.setAttribute('value', enums.CANodeProfile[profile])
             option.appendChild(document.createTextNode(profile.replace('CANodeProfile', '')));
 
-            document.querySelector('#device-profiles').appendChild(option)
+            document.querySelector('#node-input-profile').appendChild(option)
           }
 
           const res2 = await fetch('/homee-api/icons');
@@ -42,8 +42,11 @@
             option.setAttribute('value', icon)
             option.appendChild(document.createTextNode(icons[icon]));
 
-            document.querySelector('#device-icons').appendChild(option)
+            document.querySelector('#node-input-icon').appendChild(option)
           }
+
+          document.querySelector('#node-input-profile').value = this.profile;
+          document.querySelector('#node-input-icon').value = this.icon;
         }
     });
 </script>
@@ -63,13 +66,11 @@
     </div>
     <div class="form-row">
         <label for="node-input-profile"><i class="fa fa-id-badge"></i> Profile</label>
-        <input type="text" id="node-input-profile" style="width: 70%" list="device-profiles">
-        <datalist id="device-profiles"></datalist>
+        <select id="node-input-profile" style="width: 70%"></select>
     </div>
     <div class="form-row">
         <label for="node-input-icon"><i class="fa fa-id-badge"></i> Icon</label>
-        <input type="text" id="node-input-icon" style="width: 70%" list="device-icons" placeholder="default">
-        <datalist id="device-icons"></datalist>
+        <select id="node-input-icon" style="width: 70%"></select>
     </div>
     <div class="form-row">
         <label for="node-input-attributes"><i class="fa fa-shopping"></i> Attributes</label>
