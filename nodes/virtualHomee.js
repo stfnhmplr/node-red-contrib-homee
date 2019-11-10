@@ -10,7 +10,12 @@ module.exports = function (RED) {
     RED.nodes.createNode(this, config);
     const node = this;
 
-    this.api = new VirtualHomee(config.name, this.credentials.user, this.credentials.pass);
+    this.api = new VirtualHomee(
+      config.name,
+      this.credentials.user,
+      this.credentials.pass,
+      { log: node.log, debug: node.debug, error: node.error },
+    );
 
     this.devices = [];
     this.attributeMap = {};
@@ -22,10 +27,14 @@ module.exports = function (RED) {
     };
 
     this.on('close', async (done) => {
-      await discovery.stop();
-      node.debug('closed udp server');
-      await this.api.stop();
-      node.debug('closed http server');
+      try {
+        await discovery.stop();
+        node.debug('closed udp server');
+        await this.api.stop();
+        node.debug('closed http server');
+      } catch (e) {
+        node.warn('Could not properly shutdown');
+      }
       done();
     });
 
