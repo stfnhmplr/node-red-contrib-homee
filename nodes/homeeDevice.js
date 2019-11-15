@@ -15,15 +15,15 @@ module.exports = function (RED) {
       this.attributes = JSON.parse(config.attributes);
       if (!Array.isArray(this.attributes)) throw new Error('Attributes must be an array');
 
-      const invalidAttributes = this.attributes.filter((a) => a.node_id !== this.nodeId);
-      if (invalidAttributes.length) {
+      if (this.attributes.filter((a) => a.node_id !== this.nodeId).length) {
         throw new Error('The node id of at least one attribute does not match the device node id');
       }
 
       this.device = new Device(this.name, this.nodeId, this.profile, this.attributes, this.icon);
 
       this.virtualHomeeNode = RED.nodes.getNode(config['virtual-homee']);
-      this.virtualHomeeNode.registerDevice(this.id, this.device, () => {
+      this.virtualHomeeNode.registerDevice(this.id, this.device, (err) => {
+        if (err) throw Error(err);
         this.status({ fill: 'green', shape: 'dot', text: 'registered' });
       });
     } catch (e) {

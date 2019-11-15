@@ -3,6 +3,7 @@ const VirtualHomee = require('../lib/virtualHomee');
 const Device = require('../lib/device');
 const discovery = require('../lib/discovery');
 const icons = require('../lib/icons');
+const { debounce } = require('../lib/helpers');
 
 // eslint-disable-next-line
 module.exports = function (RED) {
@@ -14,17 +15,41 @@ module.exports = function (RED) {
       config.name,
       this.credentials.user,
       this.credentials.pass,
-      { log: node.log, debug: node.debug, error: node.error },
+      {
+        log: node.log, debug: node.debug, error: node.error, warn: node.warn,
+      },
     );
 
-    this.devices = [];
+    // homee expects at least one homee node
+    this.devices = [new Device('homee', -1, 1, [], 'default')];
     this.attributeMap = {};
 
     this.registerDevice = (nodeId, device, callback) => {
-      this.devices.push(device);
+      const deviceIndex = this.devices.findIndex((d) => d.id === device.id);
+
+      if (deviceIndex > -1) {
+        // deviceId already in use, replace it
+        this.devices[deviceIndex] = device;
+        node.debug(`updated device: ${device.name}`);
+      } else if (!this.checkAttributeIds(device.attributes)) {
+        // new device, but attribute check failed
+        if (typeof callback === 'function') callback('Attribute Ids must be unique!');
+        return;
+      } else {
+        // new device, attribute ids are unique
+        this.devices.push(device);
+        node.debug(`registered device: ${device.name}`);
+      }
+
       device.attributes.forEach((a) => { this.attributeMap[a.id] = nodeId; });
+      this.updateNodeList();
       if (typeof callback === 'function') callback();
     };
+
+    this.updateNodeList = debounce(() => {
+      this.api.setNodes(this.devices);
+      node.debug(`updated device list, found ${this.devices.length - 1} devices`);
+    }, 2000);
 
     this.on('close', async (done) => {
       try {
@@ -54,17 +79,6 @@ module.exports = function (RED) {
 
     // TODO: change this to RED.events.on('nodes-started')
     setTimeout(() => {
-      // homee expects one homee node
-      const homeeNode = new Device('homee', -1, 1, [], 'default');
-      this.devices.push(homeeNode);
-
-      if (!this.checkDeviceIds() || !this.checkAttributeIds()) {
-        node.error('The device IDs and the attribute IDs must be unique');
-      }
-
-      node.debug(`found ${this.devices.length - 1} devices`);
-      this.api.setNodes(this.devices);
-
       node.debug('starting udp server');
       discovery.start(config.name, node.debug);
 
@@ -72,22 +86,14 @@ module.exports = function (RED) {
       this.api.start();
     }, 3000);
 
-    this.checkDeviceIds = () => {
-      const deviceIds = this.devices.map((d) => d.id);
-      const doubleDeviceIds = deviceIds.filter(
-        (id) => deviceIds.indexOf(id) !== deviceIds.lastIndexOf(id),
-      );
-
-      return !doubleDeviceIds.length;
-    };
-
-    this.checkAttributeIds = () => {
-      const attributeIds = this.devices.map((d) => d.attributes)
-        // .flat() node v11+
-        .reduce((a, b) => a.concat(b), [])
+    this.checkAttributeIds = (attributes) => {
+      const newAttributeIds = attributes.map((a) => a.id);
+      const oldAttributeIds = this.devices.map((d) => d.attributes)
+        .reduce((a, b) => a.concat(b), []) // .flat() node v11+
         .map((a) => a.id);
-      const doubleAttributeIds = attributeIds.filter(
-        (id) => attributeIds.indexOf(id) !== attributeIds.lastIndexOf(id),
+
+      const doubleAttributeIds = newAttributeIds.filter(
+        (id, index) => newAttributeIds.indexOf(id) !== index || oldAttributeIds.indexOf(id) !== -1,
       );
 
       return !doubleAttributeIds.length;
