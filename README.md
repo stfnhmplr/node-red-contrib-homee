@@ -63,6 +63,9 @@ Every attribute change from homee sends a json payload to the output of the node
 ```json
 { "attributeId": 10, "targetValue": 0 }
 ```
+### Sample Flows
+
+The [homeean](https://github.com/homeean) project provides a collection of [sample flows](https://github.com/homeean/node-red-contrib-homee-flows), including fully-configured `virtualHomee-node`'s that can serve as a starting point for your own flows. 
 
 ## About
 This plugin is not an official plugin. The homee device simulation is based on
