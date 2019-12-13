@@ -65,11 +65,6 @@ module.exports = function (RED) {
         return;
       }
 
-      if (attribute.target_value === value) {
-        node.debug(`Attribute #${id} is already updated`);
-        return;
-      }
-
       // first update target value only
       attribute.target_value = value;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
