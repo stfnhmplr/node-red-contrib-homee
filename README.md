@@ -63,6 +63,13 @@ Every attribute change from homee sends a json payload to the output of the node
 ```json
 { "attributeId": 10, "targetValue": 0 }
 ```
+### Sample Flows
+
+The [homeean](https://github.com/homeean) project provides a collection of [sample flows](https://github.com/homeean/node-red-contrib-homee-flows), including fully-configured `virtualDevice-node`'s that can serve as a starting point for your own flows. 
+
+#### Profile and Attribute type values
+
+Each `virtualDevice-node` needs a specific `profile` value and each of the node's attributes a `type`. Known values can be found in the [homee-api](https://github.com/stfnhmplr/homee-api/) project's [`enum.js`](https://github.com/stfnhmplr/homee-api/blob/master/lib/enums.js).
 
 ## About
 This plugin is not an official plugin. The homee device simulation is based on
