@@ -51,6 +51,7 @@ module.exports = function (RED) {
      */
     this.updateAttribute = (id, value) => {
       const attribute = this.attributes.find((a) => a.id === id);
+      const unixTimestamp = Math.round(Date.now() / 1000);
 
       if (!attribute) {
         node.warn(`Can't find attribute with id ${id}`);
@@ -65,8 +66,8 @@ module.exports = function (RED) {
         return;
       }
 
-      if (attribute.target_value === value) {
-        node.debug(`Attribute #${id} is already updated`);
+      if (attribute.target_value === value && attribute.last_changed + 10 > unixTimestamp) {
+        node.warn(`Attribute #${id} was updated within the last 10 seconds. Ignoring message.`);
         return;
       }
 
@@ -77,6 +78,7 @@ module.exports = function (RED) {
       // next update current_value
       attribute.last_value = value;
       attribute.current_value = value;
+      attribute.last_changed = unixTimestamp;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
     };
   }
