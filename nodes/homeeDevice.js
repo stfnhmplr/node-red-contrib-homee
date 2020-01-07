@@ -11,6 +11,8 @@ module.exports = function (RED) {
     this.nodeId = parseInt(config.nodeId, 10);
     this.profile = parseInt(config.profile, 10);
 
+    if (this.nodeId === -1) throw new Error('The node id must not be -1');
+
     try {
       this.attributes = JSON.parse(config.attributes);
       if (!Array.isArray(this.attributes)) throw new Error('Attributes must be an array');
