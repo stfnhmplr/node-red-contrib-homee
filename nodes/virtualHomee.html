@@ -7,8 +7,10 @@
         },
         credentials: {
             user: {type: 'text'},
-            pass: {type: 'password'}
+            pass: {type: 'password'},
+            accessToken: {type: 'password'},
         },
+        exportable: false,
         label: function() {
             return this.name || 'virtualHomee';
         },

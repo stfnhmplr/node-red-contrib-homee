@@ -1,4 +1,5 @@
 const enums = require('homee-api/lib/enums');
+const crypto = require('crypto');
 const VirtualHomee = require('../lib/virtualHomee');
 const Device = require('../lib/device');
 const discovery = require('../lib/discovery');
@@ -11,10 +12,15 @@ module.exports = function (RED) {
     RED.nodes.createNode(this, config);
     const node = this;
 
+    if (!this.credentials.accessToken) {
+      node.debug('no access token available, generating new one...');
+      this.credentials.accessToken = crypto.randomBytes(12).toString('hex');
+      RED.nodes.addCredentials(node.id, this.credentials);
+    }
+
     this.api = new VirtualHomee(
       config.name,
-      this.credentials.user,
-      this.credentials.pass,
+      this.credentials,
       {
         log: node.log, debug: node.debug, error: node.error, warn: node.warn,
       },
@@ -107,6 +113,7 @@ module.exports = function (RED) {
     credentials: {
       user: { type: 'text' },
       pass: { type: 'password' },
+      accessToken: { type: 'password' },
     },
   });
 };
