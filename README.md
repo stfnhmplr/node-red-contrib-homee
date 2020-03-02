@@ -1,6 +1,6 @@
 # node-red-contrib-homee
 
-> access the homee api with node-red
+> access the homee api with node-red and create virtual devices for homee
 
 ## Installation
 ```
@@ -8,36 +8,70 @@ cd ~/.node-red
 npm install node-red-contrib-homee
 ```
 
-Alternatively you could use [**homeean**](https://homeean.de) to install node-red-contrib-homee (including Node-RED) on a Raspberry Pi with a plain vanilla Raspbian installation. homeean is a web based buildtool, which generates an individual buildscript (Bash-Script) for user selected Smart Home Tools to be installed on a Raspberry Pi running on Raspbian. node-red-contrib-homee (including its dependecy Node-RED) is provided as an homeean install option.
-
 ## Usage
-The node creates a websocket connection to homee. First set the IP, username and password in the configuration of the node.
 
-### Receiving messages
+This plugin provides two nodes (and two configuration nodes). The homeeApi-node
+is used to address the API of an existing homee. With the homeeDevice-node you
+can create virtual devices for your homee.
+
+### homeeAPI
+
+#### Receiving messages
 When the connection is successfully established, all messages from homee, e.g. status updates and user interactions, are passed on to the payload.
 
-### Sending messages
-homee accepts varoius messages in a particular format. Send the message as payload to the homee node. Below are a few examples of common messages.
+#### Sending messages
+homee accepts various messages in a particular format. Send the message as payload to the homee node. Below are a few examples of common messages.
 
-#### Get all nodes
+##### Get all nodes
 ```
 GET:nodes
 ```
 
-#### Get all homeegrams
+##### Get all homeegrams
 ```
 GET:homeegrams
 ```
 
-#### Get all groups
+##### Get all groups
 ```
 GET:groups
 ```
 
-#### Get all relationsships
+##### Get all relationsships
 ```
 GET:relationships
 ```
 
+### homeeDevice
+First a virtualHomee-node (like an virtual homee) must be configured. Afterwards any
+device that homee knows can be created. The devices can then be taught-in
+using the homee in homee function. Every homeeDevice-node provides one input and
+one output.
+
+#### Input from Flow
+You can change attribute values by sending a JSON object as payload to the
+homeeDevice-node. The example sets the attribute with the ID `10` to the value `1`.
+
+```json
+{ "id": 10, "value": 1 }
+```
+
+#### Flow output
+Every attribute change from homee sends a json payload to the output of the node.
+
+
+```json
+{ "attributeId": 10, "targetValue": 0 }
+```
+### Sample Flows
+
+The [homeean](https://github.com/homeean) project provides a collection of [sample flows](https://github.com/homeean/node-red-contrib-homee-flows), including fully-configured `virtualDevice-node`'s that can serve as a starting point for your own flows. 
+
+#### Profile and Attribute type values
+
+Each `virtualDevice-node` needs a specific `profile` value and each of the node's attributes a `type`. Known values can be found in the [homee-api](https://github.com/stfnhmplr/homee-api/) project's [`enum.js`](https://github.com/stfnhmplr/homee-api/blob/master/lib/enums.js).
+
 ## About
-This plugin is not an official plugin.
+This plugin is not an official plugin. The homee device simulation is based on
+the work of @tobiasgraf and his [homeejs](https://github.com/tobiasgraf/homeejs)
+and would not have been possible without him.
