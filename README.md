@@ -53,7 +53,18 @@ You can change attribute values by sending a JSON object as payload to the
 homeeDevice-node. The example sets the attribute with the ID `10` to the value `1`.
 
 ```json
-{ "id": 10, "value": 1 }
+{
+  "attribute": { 
+      "id": 10, 
+      "value": 1 
+  }
+}
+```
+**Hint**: The old syntax `{"id": 10, "value": 1}` still works but is deprecated and will be removed in one of the next versions.
+
+It's also possible to update the state of the node. The following example sets the state of the virtual device to unavailable.
+```json
+{ "state": 2 }
 ```
 
 #### Flow output
