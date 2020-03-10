@@ -35,15 +35,44 @@ module.exports = function (RED) {
 
     // new value from flow
     this.on('input', (msg) => {
-      if (typeof msg.payload.id !== 'number' || typeof msg.payload.value !== 'number') {
-        node.warn('payload.id and payload.value must be numeric. ignoring message.');
+      if (typeof msg.payload !== 'object') {
+        node.warn('Only JSON-Objects are valid payloads. Ignoring message.');
         return;
       }
 
-      this.updateAttribute(msg.payload.id, msg.payload.value);
+      if ('id' in msg.payload && 'value' in msg.payload) {
+        node.warn(`using an object with id and value is deprecated. 
+          You'll find the new syntax in the README.`);
+        this.updateAttribute(msg.payload.id, msg.payload.value);
+        return;
+      }
+
+      Object.keys(msg.payload).forEach((key) => {
+        if (key === 'attribute' && 'id' in msg.payload.attribute && 'value' in msg.payload.attribute) {
+          const { id, value } = msg.payload.attribute;
+          this.updateAttribute(id, value);
+        } else if (key === 'state') {
+          this.updateNode(key, msg.payload[key]);
+        } else {
+          node.warn('Invalid message. Please check the Readme/Wiki. Ignoring message');
+        }
+      });
     });
 
     this.on('close', () => node.status({ fill: 'red', shape: 'dot', text: 'offline' }));
+
+    /**
+     * update node
+     * @param  {string} key
+     * @param  {mixed} value
+     * @return {void}
+     */
+    this.updateNode = (key, value) => {
+      this.device[key] = value;
+      if (key === 'state') this.device.state_changed = Math.floor(Date.now() / 1000);
+      this.virtualHomeeNode.api.send(JSON.stringify({ node: this.device }));
+      node.debug(`updated ${key} of node #${this.device.id} to value ${value}`);
+    };
 
     /**
      * update attribute
@@ -52,6 +81,11 @@ module.exports = function (RED) {
      * @return {void}
      */
     this.updateAttribute = (id, value) => {
+      if (typeof id !== 'number' || typeof value !== 'number') {
+        node.warn('id and value must be numeric. ignoring message.');
+        return;
+      }
+
       const attribute = this.attributes.find((a) => a.id === id);
       const unixTimestamp = Math.round(Date.now() / 1000);
 
