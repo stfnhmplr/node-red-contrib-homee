@@ -48,13 +48,18 @@ module.exports = function (RED) {
       }
 
       Object.keys(msg.payload).forEach((key) => {
-        if (key === 'attribute' && 'id' in msg.payload.attribute && 'value' in msg.payload.attribute) {
-          const { id, value } = msg.payload.attribute;
-          this.updateAttribute(id, value);
-        } else if (key === 'state') {
-          this.updateNode(key, msg.payload[key]);
-        } else {
-          node.warn('Invalid message. Please check the Readme/Wiki. Ignoring message');
+        switch (key) {
+          case 'attribute':
+            this.updateAttribute(msg.payload.attribute.id, msg.payload.attribute.value);
+            break;
+          case 'attributes':
+            msg.payload.attributes.forEach((a) => this.updateAttribute(a.id, a.value));
+            break;
+          case 'state':
+            this.updateNode(key, msg.payload[key]);
+            break;
+          default:
+            node.warn('Invalid message. Please check the Readme/Wiki. Ignoring message');
         }
       });
     });
