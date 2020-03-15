@@ -6,7 +6,7 @@
         "start": "node node_modules/node-red/red.js -v -u .",
         "lint": "./node_modules/.bin/eslint .",
         "lint:fix": "npm run lint -- --fix",
-        "test": "mocha \"test/**/*_spec.js\""
+        "test": "mocha \"test/**/*.test.js\""
     },
     "keywords": [
         "node-red",
