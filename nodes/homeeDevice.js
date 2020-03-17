@@ -22,11 +22,11 @@ module.exports = function (RED) {
       }
 
       this.device = new Device(this.name, this.nodeId, this.profile, this.attributes, this.icon);
+      this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
 
       this.virtualHomeeNode = RED.nodes.getNode(config['virtual-homee']);
       this.virtualHomeeNode.registerDevice(this.id, this.device, (err) => {
         if (err) throw Error(err);
-        this.status({ fill: 'green', shape: 'dot', text: 'registered' });
       });
     } catch (e) {
       this.status({ fill: 'red', shape: 'dot', text: 'error' });
@@ -121,6 +121,7 @@ module.exports = function (RED) {
       attribute.current_value = value;
       attribute.last_changed = unixTimestamp;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+      this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
     };
   }
 
