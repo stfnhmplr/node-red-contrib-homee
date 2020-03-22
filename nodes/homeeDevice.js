@@ -5,7 +5,7 @@ module.exports = function (RED) {
   function HomeeDeviceNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
-
+    this.virtualHomeeNode = RED.nodes.getNode(config['virtual-homee']);
     this.icon = config.icon;
     this.name = config.name;
     this.nodeId = parseInt(config.nodeId, 10);
@@ -21,10 +21,25 @@ module.exports = function (RED) {
         throw new Error('The node id of at least one attribute does not match the device node id');
       }
 
+      node.context().get('attributes', 'homeeStore', (err, attributes) => {
+        if (err || !Array.isArray(attributes)) {
+          node.debug(`Can't load data from storage for device #${this.nodeId}, ${err}`);
+          return;
+        }
+
+        attributes.forEach((storedAttribute) => {
+          const attribute = this.attributes.find((a) => a.id === storedAttribute.id);
+          // @TODO: attribute.data = storedAttribute.data;
+          attribute.current_value = storedAttribute.current_value;
+          this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+        });
+
+        node.debug(`loaded data from storage for device #${this.nodeId}`);
+      });
+
       this.device = new Device(this.name, this.nodeId, this.profile, this.attributes, this.icon);
       this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
 
-      this.virtualHomeeNode = RED.nodes.getNode(config['virtual-homee']);
       this.virtualHomeeNode.registerDevice(this.id, this.device, (err) => {
         if (err) throw Error(err);
       });
@@ -41,7 +56,7 @@ module.exports = function (RED) {
       }
 
       if ('id' in msg.payload && 'value' in msg.payload) {
-        node.warn(`using an object with id and value is deprecated. 
+        node.warn(`using an object with id and value is deprecated.
           You'll find the new syntax in the README.`);
         this.updateAttribute(msg.payload.id, msg.payload.value);
         return;
@@ -64,7 +79,15 @@ module.exports = function (RED) {
       });
     });
 
-    this.on('close', () => node.status({ fill: 'red', shape: 'dot', text: 'offline' }));
+    this.on('close', () => {
+      // store attributes with current_values and favorites (data key)
+      // file storage must be enabled
+      node.context().set('attributes', this.attributes, 'homeeStore', (err) => {
+        if (err) node.debug(`Can't store data for device #${this.nodeId}, ${err}`);
+      });
+
+      node.status({ fill: 'red', shape: 'dot', text: this.device.statusString() });
+    });
 
     /**
      * update node

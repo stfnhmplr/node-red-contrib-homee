@@ -1,6 +1,6 @@
 # node-red-contrib-homee
 
-> access the homee api with node-red and create virtual devices for homee
+Access the homee api with node-red and create virtual devices for homee.
 
 ## Installation
 ```
@@ -48,15 +48,15 @@ device that homee knows can be created. The devices can then be taught-in
 using the homee in homee function. Every homeeDevice-node provides one input and
 one output.
 
-#### Input from Flow
+#### Input from flow
 You can change attribute values by sending a JSON object as payload to the
 homeeDevice-node. The example sets the attribute with the ID `10` to the value `1`.
 
 ```json
 {
-  "attribute": { 
-      "id": 10, 
-      "value": 1 
+  "attribute": {
+      "id": 10,
+      "value": 1
   }
 }
 ```
@@ -70,17 +70,33 @@ It's also possible to update the state of the node. The following example sets t
 #### Flow output
 Every attribute change from homee sends a json payload to the output of the node.
 
-
 ```json
 { "attributeId": 10, "targetValue": 0 }
 ```
-### Sample Flows
 
-The [homeean](https://github.com/homeean) project provides a collection of [sample flows](https://github.com/homeean/node-red-contrib-homee-flows), including fully-configured `virtualDevice-node`'s that can serve as a starting point for your own flows. 
+#### Sample flows
+The [homeean](https://github.com/homeean) project provides a collection of [sample flows](https://github.com/homeean/node-red-contrib-homee-flows), including fully-configured `virtualDevice-node`'s that can serve as a starting point for your own flows.
 
 #### Profile and Attribute type values
-
 Each `virtualDevice-node` needs a specific `profile` value and each of the node's attributes a `type`. Known values can be found in the [homee-api](https://github.com/stfnhmplr/homee-api/) project's [`enum.js`](https://github.com/stfnhmplr/homee-api/blob/master/lib/enums.js).
+
+#### Persist attribute data
+By default, Node-RED does not save changes to nodes that are executed in the background. This includes
+changes to the current value of an attribute.
+
+With version 0.5.0 an optional storage possibility of attribute values is introduced.
+In order to use the storage option, the local file storage must be enabled in `settings.js`.
+
+```js
+contextStorage: {
+  default: {
+        module: "memory",
+      },
+   homeeStore: {
+       module: "localfilesystem",
+   }
+},
+```
 
 ## About
 This plugin is not an official plugin. The homee device simulation is based on
