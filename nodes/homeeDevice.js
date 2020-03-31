@@ -130,20 +130,22 @@ module.exports = function (RED) {
         return;
       }
 
-      if (attribute.target_value === value && attribute.last_changed + 10 > unixTimestamp) {
-        node.warn(`Attribute #${id} was updated within the last 10 seconds. Ignoring message.`);
-        return;
+      if (attribute.target_value === value && attribute.last_changed + 2 > unixTimestamp) {
+        node.debug(`Attribute #${id} was updated within the last two seconds.`);
       }
 
       // first update target value only
       attribute.target_value = value;
-      this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+      const { d1, ...attr1 } = attribute;
+      this.virtualHomeeNode.api.send(JSON.stringify({ attr1 }));
 
       // next update current_value
       attribute.last_value = value;
       attribute.current_value = value;
       attribute.last_changed = unixTimestamp;
-      this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+
+      const { d2, ...attr2 } = attribute;
+      this.virtualHomeeNode.api.send(JSON.stringify({ attr2 }));
       this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
     };
   }
