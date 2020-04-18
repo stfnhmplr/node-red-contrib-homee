@@ -1,4 +1,3 @@
-const should = require('should');
 const helper = require('node-red-node-test-helper');
 const homeeNode = require('../nodes/homee.js');
 
