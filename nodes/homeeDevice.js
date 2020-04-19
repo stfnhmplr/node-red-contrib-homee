@@ -136,16 +136,13 @@ module.exports = function (RED) {
 
       // first update target value only
       attribute.target_value = value;
-      const { d1, ...attr1 } = attribute;
-      this.virtualHomeeNode.api.send(JSON.stringify({ attr1 }));
+      this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
 
       // next update current_value
-      attribute.last_value = value;
+      attribute.last_value = attribute.current_value;
       attribute.current_value = value;
       attribute.last_changed = unixTimestamp;
-
-      const { d2, ...attr2 } = attribute;
-      this.virtualHomeeNode.api.send(JSON.stringify({ attr2 }));
+      this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
       this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
     };
   }
