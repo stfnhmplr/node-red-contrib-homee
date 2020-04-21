@@ -1,9 +1,15 @@
 # Changelog
 
+## [0.5.2] - 2020-04-21
+### Changed
+- catch invalid units in attributes (#9)
+- store and load attribute data only if the `homeeStore` is configured
+- wait until the context is set before closing the node
+
 ## [0.5.1] - 2020-04-18
 ### Changed
 - readded `data` key to attributes since this affects the status shown in homee
-- fixed `last_value` 
+- fixed `last_value`
 
 ## [0.5.0] - 2020-04-18
 ### Added
