@@ -21,21 +21,23 @@ module.exports = function (RED) {
         throw new Error('The node id of at least one attribute does not match the device node id');
       }
 
-      node.context().get('attributes', 'homeeStore', (err, attributes) => {
-        if (err || !Array.isArray(attributes)) {
-          node.debug(`Can't load data from storage for device #${this.nodeId}, ${err}`);
-          return;
-        }
+      if ('homeeStore' in RED.settings.contextStorage) {
+        node.context().get('attributes', 'homeeStore', (err, attributes) => {
+          if (err || !Array.isArray(attributes)) {
+            node.debug(`Can't load data from storage for device #${this.nodeId}, ${err}`);
+            return;
+          }
 
-        attributes.forEach((storedAttribute) => {
-          const attribute = this.attributes.find((a) => a.id === storedAttribute.id);
-          // @TODO: attribute.data = storedAttribute.data;
-          attribute.current_value = storedAttribute.current_value;
-          this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+          attributes.forEach((storedAttribute) => {
+            const attribute = this.attributes.find((a) => a.id === storedAttribute.id);
+            attribute.current_value = storedAttribute.current_value;
+            attribute.target_value = storedAttribute.target_value;
+            this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+          });
+
+          node.debug(`loaded data from storage for device #${this.nodeId}`);
         });
-
-        node.debug(`loaded data from storage for device #${this.nodeId}`);
-      });
+      }
 
       this.device = new Device(this.name, this.nodeId, this.profile, this.attributes, this.icon);
       this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
@@ -79,14 +81,16 @@ module.exports = function (RED) {
       });
     });
 
-    this.on('close', () => {
-      // store attributes with current_values and favorites (data key)
-      // file storage must be enabled
+    this.on('close', (done) => {
+      if (!('homeeStore' in RED.settings.contextStorage)) done();
+
       node.context().set('attributes', this.attributes, 'homeeStore', (err) => {
         if (err) node.debug(`Can't store data for device #${this.nodeId}, ${err}`);
-      });
 
-      node.status({ fill: 'red', shape: 'dot', text: this.device.statusString() });
+        node.debug(`stored data for device #${this.nodeId}`);
+        node.status({ fill: 'red', shape: 'dot', text: this.device.statusString() });
+        done();
+      });
     });
 
     /**
