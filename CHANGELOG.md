@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.3] - 2020-04-22
+### Changed
+- Bugfix: Prevent crashing due missing contextStorage configuration
+
 ## [0.5.2] - 2020-04-21
 ### Changed
 - catch invalid units in attributes (#9)
