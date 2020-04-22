@@ -10,6 +10,7 @@ module.exports = function (RED) {
     this.name = config.name;
     this.nodeId = parseInt(config.nodeId, 10);
     this.profile = parseInt(config.profile, 10);
+    this.storageConfigured = RED.settings.contextStorage && 'homeeStore' in RED.settings.contextStorage;
 
     if (this.nodeId === -1) throw new Error('The node id must not be -1');
 
@@ -21,7 +22,7 @@ module.exports = function (RED) {
         throw new Error('The node id of at least one attribute does not match the device node id');
       }
 
-      if ('homeeStore' in RED.settings.contextStorage) {
+      if (this.storageConfigured) {
         node.context().get('attributes', 'homeeStore', (err, attributes) => {
           if (err || !Array.isArray(attributes)) {
             node.debug(`Can't load data from storage for device #${this.nodeId}, ${err}`);
@@ -82,7 +83,10 @@ module.exports = function (RED) {
     });
 
     this.on('close', (done) => {
-      if (!('homeeStore' in RED.settings.contextStorage)) done();
+      if (!this.storageConfigured) {
+        done();
+        return;
+      }
 
       node.context().set('attributes', this.attributes, 'homeeStore', (err) => {
         if (err) node.debug(`Can't store data for device #${this.nodeId}, ${err}`);
