@@ -33,6 +33,8 @@ module.exports = function (RED) {
             const attribute = this.attributes.find((a) => a.id === storedAttribute.id);
             attribute.current_value = storedAttribute.current_value;
             attribute.target_value = storedAttribute.target_value;
+            attribute.data = storedAttribute.data;
+            
             this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
           });
 
@@ -146,11 +148,15 @@ module.exports = function (RED) {
       // first update target value only
       attribute.target_value = value;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+      
+      //save data if it is set
+      if (typeof data !== "undefined") {
+        attribute.data = data;
+        }
 
-      // next update current_value and data
+      // next update current_value
       attribute.last_value = attribute.current_value;
       attribute.current_value = value;
-      attribute.data = data;
       attribute.last_changed = unixTimestamp;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
       this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
