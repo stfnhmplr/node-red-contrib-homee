@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.0] - 2020-06-04
+### Added
+- Added relationships (node <--> group) to global context
+- Added option to disable the distribution to the global context
+- Add option to change data in device-attribute (PR #10)
+
 ## [0.5.3] - 2020-04-22
 ### Changed
 - Bugfix: Prevent crashing due missing contextStorage configuration
