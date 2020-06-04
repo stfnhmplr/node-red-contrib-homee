@@ -4,7 +4,8 @@
         color: '#a6bbcf',
         defaults: {
             name: {value: ''},
-            host: {value: ''}
+            host: {value: ''},
+            globalContext: {value: true},
         },
         credentials: {
             user: {type: 'text'},
@@ -33,6 +34,11 @@
         <label for="node-config-input-pass"><i class="fa fa-key"></i> Password</label>
         <input type="password" id="node-config-input-pass">
     </div>
+    <div class="form-row">
+        <label for="node-config-input-globalContext"></label>
+        <input type="checkbox" id="node-config-input-globalContext" style="display:inline-block; width:15px; vertical-align:baseline;">
+        <span>Make homee data available via global context</span>
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="homee">
@@ -41,4 +47,5 @@
     <p><strong>Host:</strong> IP-Adress from homee</p>
     <p><strong>Username:</strong> Your username</p>
     <p><strong>Password:</strong> Your password</p>
+    <p><strong>Global Context:</strong> Choose if you want to access Nodes, Attributes, Groups and Relationships at the global context.</p>
 </script>

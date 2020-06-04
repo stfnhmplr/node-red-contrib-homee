@@ -13,11 +13,14 @@ module.exports = function (RED) {
       maxRetries: Infinity,
     });
 
-    this.homee.on('message', () => {
-      node.context().global.set('homee.nodes', node.homee.nodes);
-      node.context().global.set('homee.groups', node.homee.groups);
-      node.context().global.set('homee.attributes', node.homee.attributes);
-    });
+    if (config.globalContext) {
+      this.homee.on('message', () => {
+        node.context().global.set('homee.nodes', node.homee.nodes);
+        node.context().global.set('homee.groups', node.homee.groups);
+        node.context().global.set('homee.attributes', node.homee.attributes);
+        node.context().global.set('homee.relationships', node.homee.relationships);
+      });
+    }
 
     this.homee.on('error', (err) => {
       node.log(err);
