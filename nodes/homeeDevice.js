@@ -33,6 +33,8 @@ module.exports = function (RED) {
             const attribute = this.attributes.find((a) => a.id === storedAttribute.id);
             attribute.current_value = storedAttribute.current_value;
             attribute.target_value = storedAttribute.target_value;
+            attribute.data = storedAttribute.data;
+            
             this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
           });
 
@@ -68,10 +70,10 @@ module.exports = function (RED) {
       Object.keys(msg.payload).forEach((key) => {
         switch (key) {
           case 'attribute':
-            this.updateAttribute(msg.payload.attribute.id, msg.payload.attribute.value);
+            this.updateAttribute(msg.payload.attribute.id, msg.payload.attribute.value, msg.payload.attribute.data);
             break;
           case 'attributes':
-            msg.payload.attributes.forEach((a) => this.updateAttribute(a.id, a.value));
+            msg.payload.attributes.forEach((a) => this.updateAttribute(a.id, a.value, a.data));
             break;
           case 'state':
             this.updateNode(key, msg.payload[key]);
@@ -114,9 +116,10 @@ module.exports = function (RED) {
      * update attribute
      * @param  {int} id        the attribute id
      * @param  {int|float} value  new value
+     * @param  {string} data    new data
      * @return {void}
      */
-    this.updateAttribute = (id, value) => {
+    this.updateAttribute = (id, value, data) => {
       if (typeof id !== 'number' || typeof value !== 'number') {
         node.warn('id and value must be numeric. ignoring message.');
         return;
@@ -145,6 +148,11 @@ module.exports = function (RED) {
       // first update target value only
       attribute.target_value = value;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+      
+      //save data if it is set
+      if (typeof data !== "undefined") {
+        attribute.data = data;
+        }
 
       // next update current_value
       attribute.last_value = attribute.current_value;
