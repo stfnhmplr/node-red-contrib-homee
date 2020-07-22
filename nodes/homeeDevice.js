@@ -34,7 +34,7 @@ module.exports = function (RED) {
             attribute.current_value = storedAttribute.current_value;
             attribute.target_value = storedAttribute.target_value;
             attribute.data = storedAttribute.data;
-            
+
             this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
           });
 
@@ -70,7 +70,11 @@ module.exports = function (RED) {
       Object.keys(msg.payload).forEach((key) => {
         switch (key) {
           case 'attribute':
-            this.updateAttribute(msg.payload.attribute.id, msg.payload.attribute.value, msg.payload.attribute.data);
+            this.updateAttribute(
+              msg.payload.attribute.id,
+              msg.payload.attribute.value,
+              msg.payload.attribute.data,
+            );
             break;
           case 'attributes':
             msg.payload.attributes.forEach((a) => this.updateAttribute(a.id, a.value, a.data));
@@ -148,11 +152,11 @@ module.exports = function (RED) {
       // first update target value only
       attribute.target_value = value;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
-      
-      //save data if it is set
-      if (typeof data !== "undefined") {
+
+      // save data if it is set
+      if (typeof data !== 'undefined') {
         attribute.data = data;
-        }
+      }
 
       // next update current_value
       attribute.last_value = attribute.current_value;
