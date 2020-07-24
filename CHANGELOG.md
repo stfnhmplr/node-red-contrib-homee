@@ -3,6 +3,7 @@
 ## [0.6.1] -
 ### Changed
 - Fixed: For the attribute types FirmwareRevision, SoftwareRevision and DeviceProgramm the data attribute is used instead of the current value.
+- Fixed: Icon size and switched from png to svg
 
 ## [0.6.0] - 2020-06-04
 ### Added
