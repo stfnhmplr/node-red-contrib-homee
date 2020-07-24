@@ -14,6 +14,8 @@
         icon: 'homee-logo.svg',
         inputs: 1,
         outputs: 1,
+        inputLabels: 'device input',
+        outputLabels: 'device output',
         label: function() {
             return (this.name || 'homeeDevice') + (this.showNodeId ? ' ('+ this.nodeId +')' : '');
         },
