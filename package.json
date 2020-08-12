@@ -6,7 +6,7 @@
         "start": "node node_modules/node-red/red.js -v -u .",
         "lint": "./node_modules/.bin/eslint .",
         "lint:fix": "npm run lint -- --fix",
-        "test": "mocha \"test/**/*.test.js\""
+        "test": "mocha --exit \"test/**/*_spec.js\""
     },
     "keywords": [
         "node-red",
@@ -25,14 +25,14 @@
         "eslint-config-airbnb-base": "^14.1.0",
         "eslint-plugin-import": "^2.20.1",
         "node-red": "^1.0.4",
-        "node-red-node-test-helper": "^0.2.3"
+        "node-red-node-test-helper": "^0.2.5"
     },
     "node-red": {
         "nodes": {
             "homee": "nodes/homee.js",
-            "homeeApi": "nodes/homeeApi.js",
-            "virtualHomee": "nodes/virtualHomee.js",
-            "homeeDevice": "nodes/homeeDevice.js"
+            "homeeApi": "nodes/homee-api.js",
+            "virtualHomee": "nodes/virtual-homee.js",
+            "homeeDevice": "nodes/homee-device.js"
         }
     },
     "engines": {
