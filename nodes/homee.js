@@ -34,7 +34,6 @@ module.exports = function (RED) {
 
     this.on('close', () => {
       this.homee.disconnect();
-      node.log('homee: connection closed');
     });
   }
 

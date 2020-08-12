@@ -6,18 +6,18 @@ module.exports = function (RED) {
     const node = this;
     const { homee } = RED.nodes.getNode(config.homee);
 
-    node.status({ fill: 'red', shape: 'dot', text: 'disconnected' });
+    node.status({ fill: 'red', shape: 'dot', text: 'node-red:common.status.not-connected' });
 
     homee.on('connected', () => {
-      node.status({ fill: 'green', shape: 'dot', text: 'connected' });
+      node.status({ fill: 'green', shape: 'dot', text: 'node-red:common.status.connected' });
     });
 
     homee.on('disconnected', () => {
-      node.status({ fill: 'red', shape: 'dot', text: 'disconnected' });
+      node.status({ fill: 'red', shape: 'dot', text: 'node-red:common.status.disconnected' });
     });
 
     homee.on('reconnect', () => {
-      node.status({ fill: 'yellow', shape: 'dot', text: 'reconnecting...' });
+      node.status({ fill: 'yellow', shape: 'dot', text: 'node-red:common.status.connecting' });
     });
 
     homee.on('message', (message) => {

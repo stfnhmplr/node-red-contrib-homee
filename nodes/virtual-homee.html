@@ -1,0 +1,33 @@
+<script type="text/javascript">
+    RED.nodes.registerType('virtualHomee', {
+        category: 'config',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: 'virtualHomee', validate: RED.validators.regex(/^[A-Za-z0-9]{1,15}$/) }
+        },
+        credentials: {
+            user: { type: 'text' },
+            pass: { type: 'password' },
+            accessToken: { type: 'password' },
+        },
+        exportable: false,
+        label: function() {
+            return this.name || 'virtualHomee';
+        },
+    });
+</script>
+
+<script type="text/x-red" data-template-name="virtualHomee">
+    <div class="form-row">
+        <label for="node-config-input-name" style="width: 130px;"><i class="fa fa-cube"></i> homeeId</label>
+        <input type="text" id="node-config-input-name" placeholder="homeeId">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-user" style="width: 130px;"><i class="fa fa-user"></i> <span data-i18n="virtualHomee.label.username"></span></label>
+        <input type="text" id="node-config-input-user" data-i18n="[placeholder]virtualHomee.label.username">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-pass" style="width: 130px;"><i class="fa fa-key"></i> <span data-i18n="virtualHomee.label.password"></span></label>
+        <input type="password" id="node-config-input-pass">
+    </div>
+</script>

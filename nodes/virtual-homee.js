@@ -20,9 +20,11 @@ module.exports = function (RED) {
 
     this.api = new VirtualHomee(
       config.name,
-      this.credentials,
-      {
-        log: node.log, debug: node.debug, error: node.error, warn: node.warn,
+      this.credentials, {
+        log: node.log,
+        debug: node.debug,
+        error: node.error,
+        warn: node.warn,
       },
     );
 
@@ -39,8 +41,10 @@ module.exports = function (RED) {
         node.debug(`updated device: ${device.name}`);
       } else if (!this.checkAttributeIds(device.attributes)) {
         // new device, but attribute check failed
-        if (typeof callback === 'function') callback('Attribute Ids must be unique!');
-        return;
+        if (typeof callback === 'function') {
+          callback(RED._('virtualHomee.error.attributes-not-unique'));
+          return;
+        }
       } else {
         // new device, attribute ids are unique
         this.devices.push(device);

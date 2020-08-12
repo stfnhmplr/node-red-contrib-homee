@@ -1,0 +1,11 @@
+{
+  "virtualHomee": {
+    "error": {
+      "attributes-not-unique": "Die Attribut IDs dürfen nicht doppelt  vorkommen."
+    },
+    "label": {
+      "password": "Passwort",
+      "username": "Benutzername"
+    }
+  }
+}

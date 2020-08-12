@@ -3,13 +3,13 @@
         category: 'config',
         color: '#a6bbcf',
         defaults: {
-            name: {value: ''},
-            host: {value: ''},
-            globalContext: {value: true},
+            name: { value: '' },
+            host: { value: '' },
+            globalContext: { value: true },
         },
         credentials: {
-            user: {type: 'text'},
-            pass: {type: 'password'}
+            user: { type: 'text' },
+            pass: { type: 'password' }
         },
         label: function() {
             return this.name || 'homee';
@@ -19,46 +19,24 @@
 
 <script type="text/x-red" data-template-name="homee">
     <div class="form-row">
-        <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+        <label for="node-config-input-name" style="width: 130px;"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-config-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-config-input-host"><i class="fa fa-globe"></i> IP/Host</label>
-        <input type="text" id="node-config-input-host" placeholder="IP">
+        <label for="node-config-input-host" style="width: 130px;"><i class="fa fa-globe"></i> IP/Host</label>
+        <input type="text" id="node-config-input-host" placeholder="Host">
     </div>
     <div class="form-row">
-        <label for="node-config-input-user"><i class="fa fa-user"></i> Username</label>
-        <input type="text" id="node-config-input-user" placeholder="username">
+        <label for="node-config-input-user" style="width: 130px;"><i class="fa fa-user"></i> <span data-i18n="homee.label.username"></span></label>
+        <input type="text" id="node-config-input-user" data-i18n="[placeholder]homee.label.username">
     </div>
     <div class="form-row">
-        <label for="node-config-input-pass"><i class="fa fa-key"></i> Password</label>
+        <label for="node-config-input-pass" style="width: 130px;"><i class="fa fa-key"></i> <span data-i18n="homee.label.password"></span></label>
         <input type="password" id="node-config-input-pass">
     </div>
     <div class="form-row">
-        <label for="node-config-input-globalContext"></label>
+        <label for="node-config-input-globalContext" style="width: 130px;"></label>
         <input type="checkbox" id="node-config-input-globalContext" style="display:inline-block; width:15px; vertical-align:baseline;">
-        <span>Make homee data available via global context</span>
+        <span data-i18n="homee.label.globalcontext"></span>
     </div>
-</script>
-
-<script type="text/x-red" data-help-name="homee">
-    <p>Establishes a connection to your homee</p>
-    <h3>Configuration</h3>
-    <dl class="message-properties">
-        <dt>Name <span class="property-type">string</span></dt>
-        <dd>Whatever you want!</dd>
-        <dt>Host <span class="property-type">string</span></dt>
-        <dd>IP address of your homee.</dd>
-        <dt>Username <span class="property-type">string</span></dt>
-        <dd>Username of your homee account. Must be a big homee user.</dd>
-        <dt>Password <span class="property-type">string</span></dt>
-        <dd>Password for the homee user.</dd>
-        <dt>Global Context: <span class="property-type">boolean</span></dt>
-        <dd>Choose if you want to access Nodes, Attributes, Groups and Relationships at the global context.</dd>
-    </dl>
-    <h3>References</h3>
-    <p>You will find more usefull hints and instructions at
-        <a href="https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeApiNode" title="Node-RED Contrib homee Wiki">
-        https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeApiNode</a>
-    </p>
 </script>

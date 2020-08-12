@@ -1,0 +1,25 @@
+{
+	"homeeDevice": {
+		"deploy-hint": "Bitte erstelle und speichere zunächst einen virtuellen homee.",
+		"label": {
+			"profile": "Profil",
+			"attributes": "Attribute",
+			"display-id": "Node-ID im Titel anzeigen",
+			"node-input": "Einstellungen/Wertänderungen",
+			"node-output": "Statusmitteilungen"
+		},
+		"errors": {
+			"homee-node-id": "Die Node-ID darf nicht -1 sein",
+			"attributes-must-be-array": "Die Attribute müssen als Array angegeben werden",
+			"node-ids-dont-match": "Die Node-ID von mindestens einem Attribut stimmt nicht mit der Node-ID überein"
+		},
+		"warning": {
+			"invalid-payload": "Der Payload enthält kein gültiges JSON. Die Nachricht wurde ignoriert.",
+			"numeric-id-value": "Id und value müssen numerisch sein. Die Nachricht wurde ignoriert.",
+			"attribute-not-found": "Ein Attribut konnte nicht gefunden werden. ID ",
+			"value-exceeds-min-max": "Das Attribut kann nicht aktualisiert werden. Der Wert liegt außerhalb des gültigen Bereichs zwischen",
+			"and": "und",
+			"invalid-message": "Ungültige Nachricht. Bitte schau in die ReadMe oder das Wiki. Die Nachricht wurde ignoriert."
+		}
+	}
+}

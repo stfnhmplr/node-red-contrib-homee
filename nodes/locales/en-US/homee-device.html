@@ -1,0 +1,55 @@
+<script type="text/html" data-help-name="homee-device">
+    <p>Simulates a homee device</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt>virt. homee <span class="property-type">node</span></dt>
+        <dd>Choose or create your virtual homee.</dd>
+        <dt>Name <span class="property-type">string</span></dt>
+        <dd>Name your device. This name shows up in homee.</dd>
+        <dt>Node-ID <span class="property-type">number</span></dt>
+        <dd>Specify a Node-ID. This must be unique. You can also choose to display the ID in the title of the node.</dd>
+        <dt>Profile</dt>
+        <dd>Choose a profile for your device.</dd>
+        <dt>Icon</dt>
+        <dd>Choose an icon for your device or leave it at default.</dd>
+        <dt>Attributes <span class="property-type">json</span></dt>
+        <dd>Add some attributes to your device. Must be an Array of Objects.</dd>
+    </dl>
+
+    <h3>Input</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">json</span></dt>
+        <dd>
+          <p>To update an attribute value, a JSON message must be sent to the node input.</p>
+          <pre>
+{
+  "attribute": {
+    "id": 10,
+    "value": 1
+  }
+}
+          </pre>
+        </dd>
+    </dl>
+
+    <h3>Output</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">json</span></dt>
+        <dd>
+          <p>Any change to an attribute value generates a JSON message with the following format.</p>
+          <pre>
+{
+  "attributeId": 10,
+  "targetValue": 1
+}
+          </pre>
+        </dd>
+    </dl>
+
+    <h3>References</h3>
+    <p>You will find more usefull hints and instructions at
+        <a href="https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeDeviceNode" title="Node-RED Contrib homee Wiki">
+        https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeDeviceNode</a>
+    </p>
+</script>

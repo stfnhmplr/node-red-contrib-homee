@@ -1,0 +1,8 @@
+{
+  "homeeApi": {
+    "label": {
+      "node-input": "message to homee",
+      "node-output": "message from homee"
+    }
+  }
+}

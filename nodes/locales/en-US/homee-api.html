@@ -1,29 +1,4 @@
-<script type="text/javascript">
-    RED.nodes.registerType('homeeApi', {
-        category: 'homee',
-        color: '#a6bbcf',
-        defaults: {
-            homee: {value: '', type: 'homee'}
-        },
-        icon: 'homee-logo.svg',
-        inputs:1,
-        outputs:1,
-        inputLabels: 'message to homee',
-        outputLabels: 'message from homee',
-        label: function() {
-            return this.name || 'homeeApi';
-        }
-    });
-</script>
-
-<script type="text/x-red" data-template-name="homeeApi">
-    <div class="form-row">
-        <label for="node-input-homee"><i class="icon-tag"></i> homee</label>
-        <input type="text" id="node-input-homee" placeholder="homee">
-    </div>
-</script>
-
-<script type="text/x-red" data-help-name="homeeApi">
+<script type="text/html" data-help-name="homeeApi">
     <p>Transmits and receives messages from your homee.</p>
 
     <h3>Configuration</h3>

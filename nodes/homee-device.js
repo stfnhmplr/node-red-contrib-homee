@@ -12,14 +12,14 @@ module.exports = function (RED) {
     this.profile = parseInt(config.profile, 10);
     this.storageConfigured = RED.settings.contextStorage && 'homeeStore' in RED.settings.contextStorage;
 
-    if (this.nodeId === -1) throw new Error('The node id must not be -1');
+    if (this.nodeId === -1) throw new Error(RED._('homeeDevice.error.homee-node-id'));
 
     try {
       this.attributes = JSON.parse(config.attributes);
-      if (!Array.isArray(this.attributes)) throw new Error('Attributes must be an array');
+      if (!Array.isArray(this.attributes)) throw new Error(RED._('homeeDevice.error.attributes-must-be-array'));
 
       if (this.attributes.filter((a) => a.node_id !== this.nodeId).length) {
-        throw new Error('The node id of at least one attribute does not match the device node id');
+        throw new Error(RED._('homeeDevice.error.node-ids-dont-match'));
       }
 
       if (this.storageConfigured) {
@@ -56,7 +56,7 @@ module.exports = function (RED) {
     // new value from flow
     this.on('input', (msg) => {
       if (typeof msg.payload !== 'object') {
-        node.warn('Only JSON-Objects are valid payloads. Ignoring message.');
+        node.warn(RED._('homeeDevice.warning.invalid-payload'));
         return;
       }
 
@@ -118,14 +118,14 @@ module.exports = function (RED) {
 
     /**
      * update attribute
-     * @param  {int} id        the attribute id
+     * @param  {int} id  the attribute id
      * @param  {int|float} value  new value
      * @param  {string} data    new data
      * @return {void}
      */
     this.updateAttribute = (id, value, data) => {
       if (typeof id !== 'number' || typeof value !== 'number') {
-        node.warn('id and value must be numeric. ignoring message.');
+        node.warn(RED._('homeeDevice.warning.numeric-id-value'));
         return;
       }
 
@@ -133,15 +133,14 @@ module.exports = function (RED) {
       const unixTimestamp = Math.round(Date.now() / 1000);
 
       if (!attribute) {
-        node.warn(`Can't find attribute with id ${id}`);
+        node.warn(`${RED._('homeeDevice.warning.attribute-not-found')} ${id}`);
         return;
       }
 
       node.debug(`updating attribute #${id} to value: ${value}`);
 
       if (value < attribute.minimum || value > attribute.maximum) {
-        node.warn(`can't update attribute. The provided value must be
-            between ${attribute.minimum} and ${attribute.maximum}`);
+        node.warn(`${RED._('homeeDevice.warning.value-exceeds-min-max')} ${attribute.minimum} ${RED._('homeeDevice.warning.and')} ${attribute.maximum}`);
         return;
       }
 

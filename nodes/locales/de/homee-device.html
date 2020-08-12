@@ -1,0 +1,55 @@
+<script type="text/html" data-help-name="homeeDevice">
+    <p>Simuliert ein homee Gerät</p>
+
+    <h3>Konfiguration</h3>
+    <dl class="message-properties">
+        <dt>virt. homee <span class="property-type">node</span></dt>
+        <dd>Wähle oder erstelle einen virtuellen homee</dd>
+        <dt>Name <span class="property-type">string</span></dt>
+        <dd>Name des Geräts. Wird nach dem Einlernen in homee angezeigt.</dd>
+        <dt>Node-ID <span class="property-type">number</span></dt>
+        <dd>Eine einzigartige Node-ID. Die Node-ID kann auch im Titel des Nodes angezeigt werden.</dd>
+        <dt>Profile</dt>
+        <dd>Das Geräteprofil deines virtuellen Geräts</dd>
+        <dt>Icon</dt>
+        <dd>Das Icon deines virtuellen Geräts</dd>
+        <dt>Attributes <span class="property-type">json</span></dt>
+        <dd>Attribute des Geräts im JSON Format. Muss ein Array von Objekten sein.</dd>
+    </dl>
+
+    <h3>Eingang</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">json</span></dt>
+        <dd>
+          <p>Um den aktuellen Attributwert zu aktualisieren, muss eine JSON Nachricht an den Eingang des Nodes gesendet werden.</p>
+          <pre>
+{
+  "attribute": {
+    "id": 10,
+    "value": 1
+  }
+}
+          </pre>
+        </dd>
+    </dl>
+
+    <h3>Output</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">json</span></dt>
+        <dd>
+          <p>Jede Änderungen des aktuellen Wertes kann am Ausgang des Geräts abgefangen werden. Die Nachricht hat das folgende Format:</p>
+          <pre>
+{
+  "attributeId": 10,
+  "targetValue": 1
+}
+          </pre>
+        </dd>
+    </dl>
+
+    <h3>References</h3>
+    <p>Weitere Informationen gibt es im Wiki unter
+        <a href="https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeDeviceNode" title="Node-RED Contrib homee Wiki">
+        https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeDeviceNode</a>
+    </p>
+</script>

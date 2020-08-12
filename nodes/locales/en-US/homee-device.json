@@ -1,0 +1,25 @@
+{
+	"homeeDevice": {
+		"deploy-hint": "Please create and deploy a virtual homee first.",
+		"label": {
+			"profile": "Profile",
+			"attributes": "Attributes",
+			"display-id": "Display Node-ID in title",
+			"node-input": "update status/settings",
+			"node-output": "Status updates"
+		},
+		"error": {
+			"homee-node-id": "The node id must not be -1",
+			"attributes-must-be-array": "Attributes must be an array",
+			"node-ids-dont-match": "The node id of at least one attribute does not match the device node id"
+		},
+		"warning": {
+			"invalid-payload": "Only JSON-Objects are valid payloads. Ignoring message.",
+			"numeric-id-value": "Id and value must be numeric. Ignoring message.",
+			"attribute-not-found": "Can't find attribute with id",
+			"value-exceeds-min-max": "Can't update attribute. The provided value must be between",
+			"and": "and",
+			"invalid-message": "Invalid message. Please check the Readme/Wiki. Ignoring message"
+		}
+	}
+}
