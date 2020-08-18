@@ -3,7 +3,11 @@
         category: 'homee',
         color: '#a6bbcf',
         defaults: {
-            homee: {value: '', type: 'homee'}
+            homee: { value: '', type: 'homee' },
+            name: { value: 'homeeApi' },
+            messageTypeFilter: { value: [] },
+            nodeFilter: { value: null },
+            attributeFilter: { value: null },
         },
         icon: 'homee-logo.svg',
         inputs:1,
@@ -12,13 +16,106 @@
         outputLabels: function() { return this._('homeeApi.label.node-output') },
         label: function() {
             return this.name || 'homeeApi';
-        }
+        },
+        oneditprepare: function () {
+          const selectedItems = this.messageTypeFilter || [];
+          const filterItems = [
+            {
+              id: 'attribute',
+              label: this._('homeeApi.label.attributes'),
+              checkbox: true,
+              selected: selectedItems.indexOf('attribute') !== -1,
+            },
+            {
+              id: 'error',
+              label: this._('homeeApi.label.errors'),
+              checkbox: true,
+              selected: selectedItems.indexOf('error') !== -1,
+            },
+            {
+              id: 'group',
+              label: this._('homeeApi.label.groups'),
+              checkbox: true,
+              selected: selectedItems.indexOf('group') !== -1,
+            },
+            {
+              id: 'homeegram',
+              label: this._('homeeApi.label.homeegrams'),
+              checkbox: true,
+              selected: selectedItems.indexOf('homeegram') !== -1,
+            },
+            {
+              id: 'node',
+              label: this._('homeeApi.label.nodes'),
+              checkbox: true,
+              selected: selectedItems.indexOf('node') !== -1,
+            },
+            {
+              id: 'relationship',
+              label: this._('homeeApi.label.relationships'),
+              checkbox: true,
+              selected: selectedItems.indexOf('relationship') !== -1,
+            },
+            {
+              id: 'user',
+              label: this._('homeeApi.label.users'),
+              checkbox: true,
+              selected: selectedItems.indexOf('user') !== -1,
+            },
+            {
+              id: 'warning',
+              label: this._('homeeApi.label.warnings'),
+              checkbox: true,
+              selected: selectedItems.indexOf('warning') !== -1,
+            },
+          ];
+
+          var messageTypeList = $('#node-input-messageType-target-container-div')
+            .css({width: '100%', height: '100px'})
+            .treeList({ multi: true })
+            .treeList('data', filterItems);
+        },
+        oneditsave: function() {
+            this.messageTypeFilter = $('#node-input-messageType-target-container-div')
+              .treeList('selected')
+              .map(function(i) { return i.id });
+        },
     });
 </script>
 
 <script type="text/x-red" data-template-name="homeeApi">
     <div class="form-row">
-        <label for="node-input-homee"><i class="icon-tag"></i> homee</label>
+        <label for="node-input-homee">
+          <i class="fa fa-cube"></i> homee
+        </label>
         <input type="text" id="node-input-homee" placeholder="homee">
     </div>
+    <div class="form-row">
+        <label for="node-input-name">
+          <i class="icon-tag"></i> <span data-i18n="homeeApi.label.name"</span>
+        </label>
+        <input type="text" id="node-input-name" placeholder="homeeApi">
+    </div>
+    <p><i class="fa fa-filter"></i> <span data-i18n="homeeApi.label.filter-messages"</h4>
+    <div class="form-row">
+      <label for="node-input-messageType">
+        <i class="fa fa-tag"></i> <span data-i18n="homeeApi.label.typeFilter"></span>
+      </label>
+      <div class="node-input-messageType-row node-input-messageType-list-row" style="display: inline-block; width: 70%;">
+        <div id="node-input-messageType-target-container-div"></div>
+      </div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-nodeFilter">
+          <i class="fa fa-hashtag"></i> <span data-i18n="homeeApi.label.nodeFilter"</span>
+        </label>
+        <input type="number" id="node-input-nodeFilter" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-attributeFilter">
+          <i class="fa fa-hashtag"></i> <span data-i18n="homeeApi.label.attributeFilter"</span>
+        </label>
+        <input type="number" id="node-input-attributeFilter">
+    </div>
+
 </script>

@@ -2,7 +2,20 @@
   "homeeApi": {
     "label": {
       "node-input": "Nachricht an homee",
-      "node-output": "Nachricht von homee"
+      "node-output": "Nachricht von homee",
+      "name": "Name",
+      "filter-messages": "Filter für ausgehende Nachrichten",
+      "typeFilter": "Typ",
+      "nodeFilter": "Node ID",
+      "attributeFilter": "Attribut ID",
+      "attributes": "Attribute",
+      "errors": "Fehler",
+      "groups": "Gruppen",
+      "homeegrams": "Homeegramme",
+      "nodes": "Geräte",
+      "relationships": "Beziehungen",
+      "users": "Benutzer",
+      "warnings": "Warnungen"
     }
   }
 }

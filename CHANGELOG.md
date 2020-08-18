@@ -3,9 +3,11 @@
 ## [0.7.0] -
 ### Added
 - Added german translation
+- homeeApi node: added filter options for outgoing messages
 ### Changed
 - Fixed: For attribute types FirmwareRevision, SoftwareRevision and DeviceProgramm the data attribute is used instead of the current value.
-- Fixed: Icon size and switched from png to svg
+- fixed icon size and switched from png to svg
+- homeeApi node: Changed icon for configuration node
 
 ## [0.6.0] - 2020-06-04
 ### Added

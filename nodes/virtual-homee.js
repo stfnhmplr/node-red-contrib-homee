@@ -87,7 +87,6 @@ module.exports = function (RED) {
       deviceNode.send({ payload: { attributeId, targetValue } });
     });
 
-    // TODO: change this to RED.events.on('nodes-started')
     setTimeout(() => {
       node.debug('starting udp server');
       discovery.start(config.name, node.debug);
