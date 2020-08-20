@@ -4,12 +4,13 @@
         color: '#a6bbcf',
         defaults: {
             'virtual-homee': {value: '', type: 'virtualHomee'},
-            'name': {value: '', required: true},
-            'nodeId': {value: '', validate: RED.validators.number(), required: true},
-            'showNodeId': {value: true},
-            'profile': {value: '', validate: RED.validators.number(), required: true},
-            'icon': {value: 'default'},
-            'attributes': {value: '', validate: RED.validators.typedInput('json'), required: true}
+            'name': { value: '', required: true },
+            'nodeId': { value: '', validate: RED.validators.number(), required: true },
+            'showNodeId': { value: true },
+            'profile': { value: '', validate: RED.validators.number(), required: true },
+            'icon': { value: 'default' },
+            'attributes': { value: '', validate: RED.validators.typedInput('json'), required: true },
+            'statusTemplate': { value: ''},
         },
         icon: 'homee-logo.svg',
         inputs: 1,
@@ -75,14 +76,18 @@
     </div>
     <div class="form-row">
         <label for="node-input-profile"><i class="fa fa-id-badge"></i> <span data-i18n="homeeDevice.label.profile"></span></label>
-        <select id="node-input-profile" style="width: 70%"></select>
+        <select id="node-input-profile"></select>
     </div>
     <div class="form-row">
         <label for="node-input-icon"><i class="fa fa-image"></i> Icon</label>
-        <select id="node-input-icon" style="width: 70%"></select>
+        <select id="node-input-icon"></select>
     </div>
     <div class="form-row">
         <label for="node-input-attributes"><i class="fa fa-code"></i> <span data-i18n="homeeDevice.label.attributes"></span></label>
-        <input type="text" id="node-input-attributes" style="width:70%">
+        <input type="text" id="node-input-attributes">
+    </div>
+    <div class="form-row">
+        <label for="node-input-statusTemplate"><i class="fa fa-code"></i> <span data-i18n="homeeDevice.label.status-template"></span></label>
+        <input type="text" id="node-input-statusTemplate" placeholder="{{ #id.current_value }}" style="font-family: monospace;">
     </div>
 </script>

@@ -4,6 +4,7 @@
 ### Added
 - Added german translation
 - homeeApi node: added filter options for outgoing messages
+- homeeDevice node: allow a custom template for the nodes status text
 ### Changed
 - Fixed: For attribute types FirmwareRevision, SoftwareRevision and DeviceProgramm the data attribute is used instead of the current value.
 - fixed icon size and switched from png to svg

@@ -168,12 +168,33 @@ describe('homeeDevice Node', () => {
     });
   });
 
-  it('should update the status string on new values', (done) => {
+  it('should update the status text on new values', (done) => {
     helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
       const n2 = helper.getNode('n2');
 
       n2.on('input', () => {
         n2.status.should.be.calledWithExactly({ fill: 'green', shape: 'dot', text: 'On' });
+        done();
+      });
+
+      n2.receive({
+        payload: {
+          attribute: {
+            id: 1,
+            value: 1,
+          },
+        },
+      });
+    });
+  });
+
+  it('should allow a custom template for the status text', (done) => {
+    helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
+      const n2 = helper.getNode('n2');
+      n2.statusTemplate = 'the current value of attribute {{ #1.id }} is {{ #1.current_value }}';
+
+      n2.on('input', () => {
+        n2.status.should.be.calledWithExactly({ fill: 'green', shape: 'dot', text: 'the current value of attribute 1 is 1' });
         done();
       });
 

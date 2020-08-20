@@ -10,6 +10,7 @@ module.exports = function (RED) {
     this.name = config.name;
     this.nodeId = parseInt(config.nodeId, 10);
     this.profile = parseInt(config.profile, 10);
+    this.statusTemplate = config.statusTemplate;
     this.storageConfigured = RED.settings.contextStorage && 'homeeStore' in RED.settings.contextStorage;
 
     if (this.nodeId === -1) throw new Error(RED._('homeeDevice.error.homee-node-id'));
@@ -43,7 +44,7 @@ module.exports = function (RED) {
       }
 
       this.device = new Device(this.name, this.nodeId, this.profile, this.attributes, this.icon);
-      this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
+      this.status({ fill: 'green', shape: 'dot', text: this.device.statusString(this.statusTemplate) });
 
       this.virtualHomeeNode.registerDevice(this.id, this.device, (err) => {
         if (err) throw Error(err);
@@ -98,7 +99,7 @@ module.exports = function (RED) {
         if (err) node.debug(`Can't store data for device #${this.nodeId}, ${err}`);
 
         node.debug(`stored data for device #${this.nodeId}`);
-        node.status({ fill: 'red', shape: 'dot', text: this.device.statusString() });
+        node.status({ fill: 'red', shape: 'dot', text: this.device.statusString(this.statusTemplate) });
         done();
       });
     });
@@ -162,7 +163,7 @@ module.exports = function (RED) {
       attribute.current_value = value;
       attribute.last_changed = unixTimestamp;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
-      this.status({ fill: 'green', shape: 'dot', text: this.device.statusString() });
+      this.status({ fill: 'green', shape: 'dot', text: this.device.statusString(this.statusTemplate) });
     };
   }
 

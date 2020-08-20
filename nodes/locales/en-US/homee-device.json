@@ -6,7 +6,8 @@
 			"attributes": "Attributes",
 			"display-id": "Display Node-ID in title",
 			"node-input": "update status/settings",
-			"node-output": "Status updates"
+			"node-output": "Status updates",
+			"status-template": "Status template"
 		},
 		"error": {
 			"homee-node-id": "The node id must not be -1",
