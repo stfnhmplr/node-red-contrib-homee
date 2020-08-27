@@ -9,7 +9,7 @@
             'showNodeId': { value: true },
             'profile': { value: '', validate: RED.validators.number(), required: true },
             'icon': { value: 'default' },
-            'attributes': { value: '', validate: RED.validators.typedInput('json'), required: true },
+            'attributes': { value: [], required: true },
             'statusTemplate': { value: ''},
         },
         icon: 'homee-logo.svg',
@@ -21,20 +21,124 @@
             return (this.name || 'homeeDevice') + (this.showNodeId ? ' ('+ this.nodeId +')' : '');
         },
         oneditprepare: async function () {
-          $("#node-input-attributes").typedInput({
-            default: 'json',
-            types: ['json']
-          });
+          const node = this;
+          if (node['virtual-homee']) $('#homee-deploy-hint').hide();
 
           const res1 = await fetch('/homee-api/enums');
           const enums = await res1.json();
 
+          const profileField = $('#node-input-profile');
           for (profile in enums.CANodeProfile) {
-            const option = document.createElement('option')
-            option.setAttribute('value', enums.CANodeProfile[profile])
-            option.appendChild(document.createTextNode(profile.replace('CANodeProfile', '')));
+            $('<option/>')
+              .val(enums.CANodeProfile[profile])
+              .text(profile.replace('CANodeProfile', ''))
+              .appendTo(profileField);
+          }
 
-            document.querySelector('#node-input-profile').appendChild(option)
+          $('#node-input-attribute-list').editableList({
+            addItem: function (listItem, index, data) {
+              const html = $($('#homee-attributes-template').html());
+              const idField = html.find('.node-input-attribute-id');
+              const typeField = html.find('.node-input-attribute-type');
+              const jsonField = html.find('.node-input-attribute-json');
+              jsonField.typedInput({ default: 'json', types: ['json'] });
+
+              listItem.updateInfo = (data) => {
+                ['minimum', 'maximum', 'step_value', 'unit'].forEach((key) => {
+                  html.find(`.node-input-attribute-${key} code`).text(data[key]);
+                });
+              };
+
+              listItem.updateJson = (data) => {
+                const { id, type, node_id, ...other } = data;
+                html.find('.node-input-attribute-json').typedInput('value', JSON.stringify(other));
+              };
+
+              const attribute = Object.hasOwnProperty.call(data, 'id') ? data : {
+                id: parseInt(node.nodeId, 10) +  index + 1,
+                type: 0,
+                state: 1,
+                node_id: parseInt(node.nodeId, 10),
+                instance: 0,
+                minimum: 0,
+                maximum: 1,
+                current_value: 0,
+                target_value: 0,
+                last_value: 0,
+                data: '',
+                unit: 'n%2Fa',
+                step_value: 1,
+                editable: 0,
+                last_changed: Math.round(Date.now() / 1000),
+                changed_by: 1,
+                changed_by_id: 0,
+                based_on: 1,
+                options: [],
+              };
+
+              attribute.unit = decodeURIComponent(attribute.unit);
+
+              for (type in enums.CAAttributeType) {
+                $('<option/>')
+                  .val(enums.CAAttributeType[type])
+                  .text(type.replace('CAAttributeType', ''))
+                  .appendTo(typeField);
+              }
+
+              idField.val(attribute.id);
+              typeField.val(attribute.type);
+              listItem.updateJson(attribute);
+              listItem.updateInfo(attribute);
+
+              typeField.change(async () => {
+                try {
+                  const res = await fetch(
+                    `/homee-api/template/attribute.profile.${typeField.val()}`
+                  );
+                  const attributeTemplate = await res.json();
+                  Object.keys(attributeTemplate).forEach((key) => {
+                    if (Object.hasOwnProperty.call(attribute, key)) {
+                      if (key === 'unit') {
+                        attribute[key] = decodeURIComponent(attributeTemplate[key]);
+                      } else {
+                        attribute[key] = attributeTemplate[key];
+                      }
+                    }
+                  });
+
+                  listItem.updateJson(attribute);
+                  listItem.updateInfo(attribute);
+                } catch (e) {
+                  RED.notify(node._('homeeDevice.warning.attribute-template-not-found'), 'warning');
+                }
+              });
+
+              idField.change((e) => {
+                attribute.id = parseInt(idField.val(), 10);
+              });
+
+              jsonField.on('change', () => {
+                const value = JSON.parse(jsonField.typedInput('value'));
+                Object.keys(value).forEach((key) => {
+                  if (Object.hasOwnProperty.call(attribute, key) && attribute[key] !== value[key]) {
+                    attribute[key] = value[key];
+                  }
+                });
+
+                listItem.updateInfo(attribute);
+              });
+
+              html.find('.typed-input-expand-trigger').on('click', () => {
+                html.find('.red-ui-typedInput-option-expand').click();
+              });
+
+              listItem.append(html);
+            },
+            removeable: true,
+          });
+
+          for (let i = 0; i < node.attributes.length; i++) {
+            $("#node-input-attribute-list").editableList('addItem', node.attributes[i]);
           }
 
           const res2 = await fetch('/homee-api/icons');
@@ -51,12 +155,26 @@
 
           document.querySelector('#node-input-profile').value = this.profile;
           document.querySelector('#node-input-icon').value = this.icon;
+        },
+        oneditsave: function () {
+          const node = this;
+          node.attributes = [];
+
+          const attributes = $("#node-input-attribute-list").editableList('items');
+          attributes.each(function (i) {
+            let attribute = JSON.parse($(this).find('.node-input-attribute-json').typedInput('value'));
+            attribute.id = parseInt($(this).find('.node-input-attribute-id').val(), 10);
+            attribute.type = parseInt($(this).find('.node-input-attribute-type').val(), 10);
+            attribute.node_id = parseInt(node.nodeId, 10);
+            attribute.unit = encodeURIComponent(attribute.unit);
+            node.attributes.push(attribute);
+          })
         }
     });
 </script>
 
 <script type="text/x-red" data-template-name="homeeDevice">
-    <p><i class="fa fa-info-circle"></i> <span data-i18n="homeeDevice.deploy-hint"></span></p>
+    <p id="homee-deploy-hint"><i class="fa fa-info-circle"></i> <span data-i18n="homeeDevice.deploy-hint"></span></p>
     <div class="form-row">
         <label for="node-input-virtual-homee"><i class="fa fa-cube"></i> virt. homee</label>
         <input type="text" id="node-input-virtual-homee" placeholder="homee" style="width: 70%">
@@ -75,19 +193,55 @@
         <span data-i18n="homeeDevice.label.display-id"></span>
     </div>
     <div class="form-row">
-        <label for="node-input-profile"><i class="fa fa-id-badge"></i> <span data-i18n="homeeDevice.label.profile"></span></label>
+        <label for="node-input-profile">
+          <i class="fa fa-id-badge"></i> <span data-i18n="homeeDevice.label.profile"></span>
+        </label>
         <select id="node-input-profile"></select>
     </div>
     <div class="form-row">
         <label for="node-input-icon"><i class="fa fa-image"></i> Icon</label>
         <select id="node-input-icon"></select>
     </div>
-    <div class="form-row">
-        <label for="node-input-attributes"><i class="fa fa-code"></i> <span data-i18n="homeeDevice.label.attributes"></span></label>
-        <input type="text" id="node-input-attributes">
+    <div class="form-row" style="margin-top: 20px; margin-bottom: 20px;">
+        <label for="node-input-attribute-list">
+          <i class="fa fa-list"></i> <span data-i18n="homeeDevice.label.attributes"></label>
+        <ol id="node-input-attribute-list"></ol>
     </div>
     <div class="form-row">
-        <label for="node-input-statusTemplate"><i class="fa fa-code"></i> <span data-i18n="homeeDevice.label.status-template"></span></label>
+        <label for="node-input-statusTemplate" style="width: auto; margin-right: 10px;">
+          <i class="fa fa-code"></i> <span data-i18n="homeeDevice.label.status-template"></span>
+        </label>
         <input type="text" id="node-input-statusTemplate" placeholder="{{ #id.current_value }}" style="font-family: monospace;">
     </div>
 </script>
+
+<template id="homee-attributes-template">
+  <div style="display: flex; width: 100%;">
+    <div style="width: 20%; padding-right: 10px;">
+      <input class="node-input-attribute-id" type="number" placeholder="ID" style="width: 100%;"/>
+    </div>
+    <div style="width: 40%; padding-right: 10px;">
+      <select class="node-input-attribute-type" style="width: 100%;"></select>
+    </div>
+    <div class="node-input-attribute-infos" style="display: flex; flex-wrap: wrap; line-height: 16px; font-size: 12px; width: 35%; margin-right: 10px;">
+      <span class="node-input-attribute-minimum" style="width: 50%;">
+        Min: <code style="font-size: 12px;">0</code>
+      </span>
+      <span class="node-input-attribute-unit" style="width: 50%;">
+        Unit: <code style="font-size: 12px;">n/A</code>
+      </span>
+      <span class="node-input-attribute-maximum" style="width: 50%;">
+        Max: <code style="font-size: 12px;">1</code>
+      </span>
+      <span class="node-input-attribute-step_value" style="width: 50%;">
+        Step: <code style="font-size: 12px;">1</code>
+      </span>
+    </div>
+    <button type="button" class="red-ui-button typed-input-expand-trigger">
+      <i class="fa fa-edit"></i>
+    </button>
+    <div style="display: none;">
+      <input class="node-input-attribute-json" />
+    </div>
+  </div>
+</template>

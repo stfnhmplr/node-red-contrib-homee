@@ -20,7 +20,8 @@
 			"attribute-not-found": "Can't find attribute with id",
 			"value-exceeds-min-max": "Can't update attribute. The provided value must be between",
 			"and": "and",
-			"invalid-message": "Invalid message. Please check the Readme/Wiki. Ignoring message"
+			"invalid-message": "Invalid message. Please check the Readme/Wiki. Ignoring message",
+			"attribute-template-not-found": "No template found. Please use the edit function to properly configure the attribute."
 		}
 	}
 }

@@ -1,8 +1,9 @@
-const enums = require('homee-api/lib/enums');
 const crypto = require('crypto');
-const VirtualHomee = require('../lib/virtualHomee');
+const enums = require('homee-api/lib/enums');
 const Device = require('../lib/device');
+const VirtualHomee = require('../lib/virtualHomee');
 const discovery = require('../lib/discovery');
+const templates = require('../lib/templates');
 const icons = require('../lib/icons');
 const { debounce } = require('../lib/helpers');
 
@@ -111,6 +112,9 @@ module.exports = function (RED) {
 
   RED.httpAdmin.get('/homee-api/enums', (req, res) => res.send(enums));
   RED.httpAdmin.get('/homee-api/icons', (req, res) => res.send(icons));
+  RED.httpAdmin.get('/homee-api/template/:path', (req, res) => {
+    res.json(templates.find(req.params.path));
+  });
 
   RED.nodes.registerType('virtualHomee', VirtualHomeeNode, {
     credentials: {

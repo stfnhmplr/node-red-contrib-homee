@@ -16,7 +16,12 @@ module.exports = function (RED) {
     if (this.nodeId === -1) throw new Error(RED._('homeeDevice.error.homee-node-id'));
 
     try {
-      this.attributes = JSON.parse(config.attributes);
+      if (typeof config.attributes === 'string') {
+        this.attributes = JSON.parse(config.attributes);
+      } else {
+        this.attributes = config.attributes;
+      }
+
       if (!Array.isArray(this.attributes)) throw new Error(RED._('homeeDevice.error.attributes-must-be-array'));
 
       if (this.attributes.filter((a) => a.node_id !== this.nodeId).length) {
@@ -32,6 +37,7 @@ module.exports = function (RED) {
 
           attributes.forEach((storedAttribute) => {
             const attribute = this.attributes.find((a) => a.id === storedAttribute.id);
+            if (!attribute) return;
             attribute.current_value = storedAttribute.current_value;
             attribute.target_value = storedAttribute.target_value;
             attribute.data = storedAttribute.data;

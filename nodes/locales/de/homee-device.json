@@ -20,7 +20,8 @@
 			"attribute-not-found": "Ein Attribut konnte nicht gefunden werden. ID ",
 			"value-exceeds-min-max": "Das Attribut kann nicht aktualisiert werden. Der Wert liegt außerhalb des gültigen Bereichs zwischen",
 			"and": "und",
-			"invalid-message": "Ungültige Nachricht. Bitte schau in die ReadMe oder das Wiki. Die Nachricht wurde ignoriert."
+			"invalid-message": "Ungültige Nachricht. Bitte schau in die ReadMe oder das Wiki. Die Nachricht wurde ignoriert.",
+			"attribute-template-not-found": "Für diesen Typ wurde kein Template gefunden. Bitte passe die Werte über die Bearbeitungsfunktion manuell an."
 		}
 	}
 }
