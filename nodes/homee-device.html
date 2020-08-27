@@ -137,6 +137,7 @@
             removeable: true,
           });
 
+          if (typeof node.attributes === 'string') node.attributes = JSON.parse(node.attributes);
           for (let i = 0; i < node.attributes.length; i++) {
             $("#node-input-attribute-list").editableList('addItem', node.attributes[i]);
           }
