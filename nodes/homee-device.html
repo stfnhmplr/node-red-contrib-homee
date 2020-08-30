@@ -76,7 +76,11 @@
                 options: [],
               };
 
-              attribute.unit = decodeURIComponent(attribute.unit);
+              try {
+                attribute.unit = decodeURIComponent(attribute.unit);
+              } catch (e) {
+                attribute.unit = 'n/a';
+              }
 
               for (type in enums.CAAttributeType) {
                 $('<option/>')
@@ -98,11 +102,7 @@
                   const attributeTemplate = await res.json();
                   Object.keys(attributeTemplate).forEach((key) => {
                     if (Object.hasOwnProperty.call(attribute, key)) {
-                      if (key === 'unit') {
-                        attribute[key] = decodeURIComponent(attributeTemplate[key]);
-                      } else {
-                        attribute[key] = attributeTemplate[key];
-                      }
+                      attribute[key] = attributeTemplate[key];
                     }
                   });
 
@@ -161,12 +161,12 @@
           const node = this;
           node.attributes = [];
 
-          const attributes = $("#node-input-attribute-list").editableList('items');
+          const attributes = $('#node-input-attribute-list').editableList('items');
           attributes.each(function (i) {
             let attribute = JSON.parse($(this).find('.node-input-attribute-json').typedInput('value'));
             attribute.id = parseInt($(this).find('.node-input-attribute-id').val(), 10);
             attribute.type = parseInt($(this).find('.node-input-attribute-type').val(), 10);
-            attribute.node_id = parseInt(node.nodeId, 10);
+            attribute.node_id = parseInt($('#node-input-nodeId').val(), 10);
             attribute.unit = encodeURIComponent(attribute.unit);
             node.attributes.push(attribute);
           })
