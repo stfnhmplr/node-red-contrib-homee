@@ -55,7 +55,7 @@
               };
 
               const attribute = Object.hasOwnProperty.call(data, 'id') ? data : {
-                id: parseInt(node.nodeId, 10) +  index + 1,
+                id: parseInt(node.nodeId, 10) +  index,
                 type: 0,
                 state: 1,
                 node_id: parseInt(node.nodeId, 10),
