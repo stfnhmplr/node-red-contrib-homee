@@ -31,7 +31,7 @@
           for (profile in enums.CANodeProfile) {
             $('<option/>')
               .val(enums.CANodeProfile[profile])
-              .text(profile.replace('CANodeProfile', ''))
+              .text(node._(`homeeDevice.profile.${profile}`))
               .appendTo(profileField);
           }
 
@@ -85,7 +85,7 @@
               for (type in enums.CAAttributeType) {
                 $('<option/>')
                   .val(enums.CAAttributeType[type])
-                  .text(type.replace('CAAttributeType', ''))
+                  .text(node._(`homeeDevice.attribute.${type}`))
                   .appendTo(typeField);
               }
 
@@ -146,10 +146,9 @@
           const icons = await res2.json();
 
           for (icon in icons) {
-
             const option = document.createElement('option')
             option.setAttribute('value', icon)
-            option.appendChild(document.createTextNode(icons[icon]));
+            option.appendChild(document.createTextNode(node._(`homeeDevice.icon.${icon}`)));
 
             document.querySelector('#node-input-icon').appendChild(option)
           }
