@@ -16,9 +16,11 @@
     icon: 'homee-logo.svg',
     inputs: 1,
     outputs: 1,
-    inputLabels: () => this._('homeeDevice.label.node-input'),
-    outputLabels: () => this._('homeeDevice.label.node-output'),
-    label: () => `${this.name || 'homeeDevice'} ${this.showNodeId ? `(${this.nodeId})` : ''}`,
+    inputLabels: function () { return this._('homeeDevice.label.node-input') },
+    outputLabels: function () { return this._('homeeDevice.label.node-output') },
+    label: function () {
+      return `${this.name || 'homeeDevice'} ${this.showNodeId ? `(${this.nodeId})` : ''}`
+    },
     // eslint-disable-next-line
     oneditprepare: async function () {
       const node = this;
@@ -164,7 +166,7 @@
       node.attributes = [];
 
       const attributes = $('#node-input-attribute-list').editableList('items');
-      attributes.each(() => {
+      attributes.each(function () {
         const attribute = JSON.parse($(this).find('.node-input-attribute-json').typedInput('value'));
         attribute.id = parseInt($(this).find('.node-input-attribute-id').val(), 10);
         attribute.type = parseInt($(this).find('.node-input-attribute-type').val(), 10);
