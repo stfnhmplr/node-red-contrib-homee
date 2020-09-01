@@ -5,6 +5,8 @@ env:
   node: true
 extends:
   - airbnb-base
+plugins:
+  - html
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
