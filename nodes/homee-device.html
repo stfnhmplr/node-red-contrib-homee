@@ -1,176 +1,179 @@
 <script type="text/javascript">
-    RED.nodes.registerType('homeeDevice', {
-        category: 'homee',
-        color: '#a6bbcf',
-        defaults: {
-            'virtual-homee': {value: '', type: 'virtualHomee'},
-            'name': { value: '', required: true },
-            'nodeId': { value: '', validate: RED.validators.number(), required: true },
-            'showNodeId': { value: true },
-            'profile': { value: '', validate: RED.validators.number(), required: true },
-            'icon': { value: 'default' },
-            'attributes': { value: [], required: true },
-            'statusTemplate': { value: ''},
-        },
-        icon: 'homee-logo.svg',
-        inputs: 1,
-        outputs: 1,
-        inputLabels: function() { return this._('homeeDevice.label.node-input') },
-        outputLabels: function() { return this._('homeeDevice.label.node-output') },
-        label: function() {
-            return (this.name || 'homeeDevice') + (this.showNodeId ? ' ('+ this.nodeId +')' : '');
-        },
-        oneditprepare: async function () {
-          const node = this;
-          if (node['virtual-homee']) $('#homee-deploy-hint').hide();
+  /* eslint-disable no-undef */
+  RED.nodes.registerType('homeeDevice', {
+    category: 'homee',
+    color: '#a6bbcf',
+    defaults: {
+      'virtual-homee': { value: '', type: 'virtualHomee' },
+      name: { value: '', required: true },
+      nodeId: { value: '', validate: RED.validators.number(), required: true },
+      showNodeId: { value: true },
+      profile: { value: '', validate: RED.validators.number(), required: true },
+      icon: { value: 'default' },
+      attributes: { value: [], required: true },
+      statusTemplate: { value: '' },
+    },
+    icon: 'homee-logo.svg',
+    inputs: 1,
+    outputs: 1,
+    inputLabels: () => this._('homeeDevice.label.node-input'),
+    outputLabels: () => this._('homeeDevice.label.node-output'),
+    label: () => `${this.name || 'homeeDevice'} ${this.showNodeId ? `(${this.nodeId})` : ''}`,
+    // eslint-disable-next-line
+    oneditprepare: async function () {
+      const node = this;
+      if (node['virtual-homee']) $('#homee-deploy-hint').hide();
 
-          const res1 = await fetch('/homee-api/enums');
-          const enums = await res1.json();
+      const res1 = await fetch('/homee-api/enums');
+      const enums = await res1.json();
 
-          const profileField = $('#node-input-profile');
-          for (profile in enums.CANodeProfile) {
-            $('<option/>')
-              .val(enums.CANodeProfile[profile])
-              .text(node._(`homeeDevice.profile.${profile}`))
-              .appendTo(profileField);
+      const profileField = $('#node-input-profile');
+      Object.keys(enums.CANodeProfile).forEach((profile) => {
+        $('<option/>')
+          .val(enums.CANodeProfile[profile])
+          .text(node._(`homeeDevice.profile.${profile}`))
+          .appendTo(profileField);
+      });
+
+      $('#node-input-attribute-list').editableList({
+        addItem: (listItem, index, data) => {
+          const html = $($('#homee-attributes-template').html());
+          const idField = html.find('.node-input-attribute-id');
+          const typeField = html.find('.node-input-attribute-type');
+          const jsonField = html.find('.node-input-attribute-json');
+          const nodeId = parseInt($('#node-input-nodeId').val(), 10);
+          jsonField.typedInput({ default: 'json', types: ['json'] });
+
+          // eslint-disable-next-line no-param-reassign
+          listItem.updateInfo = (attributeData) => {
+            ['minimum', 'maximum', 'step_value', 'unit'].forEach((key) => {
+              html.find(`.node-input-attribute-${key} code`).text(attributeData[key]);
+            });
+          };
+
+          // eslint-disable-next-line no-param-reassign
+          listItem.updateJson = (attributeData) => {
+            // eslint-disable-next-line
+            const { id, type, node_id, ...other } = attributeData;
+            html.find('.node-input-attribute-json').typedInput('value', JSON.stringify(other));
+          };
+
+          const attribute = Object.hasOwnProperty.call(data, 'id') ? data : {
+            id: nodeId + index,
+            type: 0,
+            state: 1,
+            node_id: nodeId,
+            instance: 0,
+            minimum: 0,
+            maximum: 1,
+            current_value: 0,
+            target_value: 0,
+            last_value: 0,
+            data: '',
+            unit: 'n%2Fa',
+            step_value: 1,
+            editable: 0,
+            last_changed: Math.round(Date.now() / 1000),
+            changed_by: 1,
+            changed_by_id: 0,
+            based_on: 1,
+            options: [],
+          };
+
+          try {
+            attribute.unit = decodeURIComponent(attribute.unit);
+          } catch (e) {
+            attribute.unit = 'n/a';
           }
 
-          $('#node-input-attribute-list').editableList({
-            addItem: function (listItem, index, data) {
-              const html = $($('#homee-attributes-template').html());
-              const idField = html.find('.node-input-attribute-id');
-              const typeField = html.find('.node-input-attribute-type');
-              const jsonField = html.find('.node-input-attribute-json');
-              jsonField.typedInput({ default: 'json', types: ['json'] });
+          Object.keys(enums.CAAttributeType).forEach((type) => {
+            $('<option/>')
+              .val(enums.CAAttributeType[type])
+              .text(node._(`homeeDevice.attribute.${type}`))
+              .appendTo(typeField);
+          });
 
-              listItem.updateInfo = (data) => {
-                ['minimum', 'maximum', 'step_value', 'unit'].forEach((key) => {
-                  html.find(`.node-input-attribute-${key} code`).text(data[key]);
-                });
-              };
+          idField.val(attribute.id);
+          typeField.val(attribute.type);
+          listItem.updateJson(attribute);
+          listItem.updateInfo(attribute);
 
-              listItem.updateJson = (data) => {
-                const { id, type, node_id, ...other } = data;
-                html.find('.node-input-attribute-json').typedInput('value', JSON.stringify(other));
-              };
-
-              const attribute = Object.hasOwnProperty.call(data, 'id') ? data : {
-                id: parseInt(node.nodeId, 10) +  index,
-                type: 0,
-                state: 1,
-                node_id: parseInt(node.nodeId, 10),
-                instance: 0,
-                minimum: 0,
-                maximum: 1,
-                current_value: 0,
-                target_value: 0,
-                last_value: 0,
-                data: '',
-                unit: 'n%2Fa',
-                step_value: 1,
-                editable: 0,
-                last_changed: Math.round(Date.now() / 1000),
-                changed_by: 1,
-                changed_by_id: 0,
-                based_on: 1,
-                options: [],
-              };
-
-              try {
-                attribute.unit = decodeURIComponent(attribute.unit);
-              } catch (e) {
-                attribute.unit = 'n/a';
-              }
-
-              for (type in enums.CAAttributeType) {
-                $('<option/>')
-                  .val(enums.CAAttributeType[type])
-                  .text(node._(`homeeDevice.attribute.${type}`))
-                  .appendTo(typeField);
-              }
-
-              idField.val(attribute.id);
-              typeField.val(attribute.type);
-              listItem.updateJson(attribute);
-              listItem.updateInfo(attribute);
-
-              typeField.change(async () => {
-                try {
-                  const res = await fetch(
-                    `/homee-api/template/attribute.profile.${typeField.val()}`
-                  );
-                  const attributeTemplate = await res.json();
-                  Object.keys(attributeTemplate).forEach((key) => {
-                    if (Object.hasOwnProperty.call(attribute, key)) {
-                      attribute[key] = attributeTemplate[key];
-                    }
-                  });
-
-                  listItem.updateJson(attribute);
-                  listItem.updateInfo(attribute);
-                } catch (e) {
-                  RED.notify(node._('homeeDevice.warning.attribute-template-not-found'), 'warning');
+          typeField.change(async () => {
+            try {
+              const res = await fetch(`/homee-api/template/attribute.profile.${typeField.val()}`);
+              const attributeTemplate = await res.json();
+              Object.keys(attributeTemplate).forEach((key) => {
+                if (Object.hasOwnProperty.call(attribute, key)) {
+                  attribute[key] = attributeTemplate[key];
                 }
               });
 
-              idField.change((e) => {
-                attribute.id = parseInt(idField.val(), 10);
-              });
-
-              jsonField.on('change', () => {
-                const value = JSON.parse(jsonField.typedInput('value'));
-                Object.keys(value).forEach((key) => {
-                  if (Object.hasOwnProperty.call(attribute, key) && attribute[key] !== value[key]) {
-                    attribute[key] = value[key];
-                  }
-                });
-
-                listItem.updateInfo(attribute);
-              });
-
-              html.find('.typed-input-expand-trigger').on('click', () => {
-                html.find('.red-ui-typedInput-option-expand').click();
-              });
-
-              listItem.append(html);
-            },
-            removable: true,
+              listItem.updateJson(attribute);
+              listItem.updateInfo(attribute);
+            } catch (e) {
+              RED.notify(node._('homeeDevice.warning.attribute-template-not-found'), 'warning');
+            }
           });
 
-          if (typeof node.attributes === 'string') node.attributes = JSON.parse(node.attributes);
-          for (let i = 0; i < node.attributes.length; i++) {
-            $("#node-input-attribute-list").editableList('addItem', node.attributes[i]);
-          }
+          idField.change(() => {
+            attribute.id = parseInt(idField.val(), 10);
+          });
 
-          const res2 = await fetch('/homee-api/icons');
-          const icons = await res2.json();
+          jsonField.on('change', () => {
+            const value = JSON.parse(jsonField.typedInput('value'));
+            Object.keys(value).forEach((key) => {
+              if (Object.hasOwnProperty.call(attribute, key) && attribute[key] !== value[key]) {
+                attribute[key] = value[key];
+              }
+            });
 
-          for (icon in icons) {
-            const option = document.createElement('option')
-            option.setAttribute('value', icon)
-            option.appendChild(document.createTextNode(node._(`homeeDevice.icon.${icon}`)));
+            listItem.updateInfo(attribute);
+          });
 
-            document.querySelector('#node-input-icon').appendChild(option)
-          }
+          html.find('.typed-input-expand-trigger').on('click', () => {
+            html.find('.red-ui-typedInput-option-expand').click();
+          });
 
-          document.querySelector('#node-input-profile').value = this.profile;
-          document.querySelector('#node-input-icon').value = this.icon;
+          listItem.append(html);
         },
-        oneditsave: function () {
-          const node = this;
-          node.attributes = [];
+        removable: true,
+      });
 
-          const attributes = $('#node-input-attribute-list').editableList('items');
-          attributes.each(function (i) {
-            let attribute = JSON.parse($(this).find('.node-input-attribute-json').typedInput('value'));
-            attribute.id = parseInt($(this).find('.node-input-attribute-id').val(), 10);
-            attribute.type = parseInt($(this).find('.node-input-attribute-type').val(), 10);
-            attribute.node_id = parseInt($('#node-input-nodeId').val(), 10);
-            attribute.unit = encodeURIComponent(attribute.unit);
-            node.attributes.push(attribute);
-          })
-        }
-    });
+      if (typeof node.attributes === 'string') node.attributes = JSON.parse(node.attributes);
+      for (let i = 0; i < node.attributes.length; i += 1) {
+        $('#node-input-attribute-list').editableList('addItem', node.attributes[i]);
+      }
+
+      const res2 = await fetch('/homee-api/icons');
+      const icons = await res2.json();
+      const iconField = $('#node-input-icon');
+
+      Object.keys(icons).forEach((icon) => {
+        $('<option/>')
+          .val(icon)
+          .text(node._(`homeeDevice.icon.${icon}`))
+          .appendTo(iconField);
+      });
+
+      $('#node-input-profile').val(this.profile);
+      $('#node-input-icon').val(this.icon);
+    },
+    // eslint-disable-next-line
+    oneditsave: function () {
+      const node = this;
+      node.attributes = [];
+
+      const attributes = $('#node-input-attribute-list').editableList('items');
+      attributes.each(() => {
+        const attribute = JSON.parse($(this).find('.node-input-attribute-json').typedInput('value'));
+        attribute.id = parseInt($(this).find('.node-input-attribute-id').val(), 10);
+        attribute.type = parseInt($(this).find('.node-input-attribute-type').val(), 10);
+        attribute.node_id = parseInt($('#node-input-nodeId').val(), 10);
+        attribute.unit = encodeURIComponent(attribute.unit);
+        node.attributes.push(attribute);
+      });
+    },
+  });
 </script>
 
 <script type="text/x-red" data-template-name="homeeDevice">
