@@ -5,6 +5,8 @@ env:
   node: true
 extends:
   - airbnb-base
+plugins:
+  - html
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
@@ -12,6 +14,6 @@ parserOptions:
   ecmaVersion: 2018
 rules: {}
 overrides:
-  - files: test/*.test.js
+  - files: test/*_spec.js
     env:
       mocha: true

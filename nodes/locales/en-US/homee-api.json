@@ -1,0 +1,21 @@
+{
+  "homeeApi": {
+    "label": {
+      "node-input": "message to homee",
+      "node-output": "message from homee",
+      "name": "Name",
+      "filter-messages": "Filter for outgoing messages",
+      "typeFilter": "Type",
+      "nodeFilter": "Node id",
+      "attributeFilter": "Attribute id",
+      "attributes": "Attributes",
+      "errors": "Errors",
+      "groups": "Groups",
+      "homeegrams": "Homeegrams",
+      "nodes": "Devices",
+      "relationships": "Relationships",
+      "users": "Users",
+      "warnings": "Warnings"
+    }
+  }
+}

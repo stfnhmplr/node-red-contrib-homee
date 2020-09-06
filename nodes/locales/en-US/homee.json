@@ -1,0 +1,9 @@
+{
+    "homee" : {
+        "label": {
+          "username": "Username",
+          "password": "Password",
+          "globalcontext": "Make homee data available via global context"
+        }
+    }
+}

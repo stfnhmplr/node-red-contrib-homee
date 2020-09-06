@@ -1,8 +1,9 @@
-const enums = require('homee-api/lib/enums');
 const crypto = require('crypto');
-const VirtualHomee = require('../lib/virtualHomee');
+const enums = require('homee-api/lib/enums');
 const Device = require('../lib/device');
+const VirtualHomee = require('../lib/virtualHomee');
 const discovery = require('../lib/discovery');
+const templates = require('../lib/templates');
 const icons = require('../lib/icons');
 const { debounce } = require('../lib/helpers');
 
@@ -20,9 +21,11 @@ module.exports = function (RED) {
 
     this.api = new VirtualHomee(
       config.name,
-      this.credentials,
-      {
-        log: node.log, debug: node.debug, error: node.error, warn: node.warn,
+      this.credentials, {
+        log: node.log,
+        debug: node.debug,
+        error: node.error,
+        warn: node.warn,
       },
     );
 
@@ -39,8 +42,10 @@ module.exports = function (RED) {
         node.debug(`updated device: ${device.name}`);
       } else if (!this.checkAttributeIds(device.attributes)) {
         // new device, but attribute check failed
-        if (typeof callback === 'function') callback('Attribute Ids must be unique!');
-        return;
+        if (typeof callback === 'function') {
+          callback(RED._('virtualHomee.error.attributes-not-unique'));
+          return;
+        }
       } else {
         // new device, attribute ids are unique
         this.devices.push(device);
@@ -83,7 +88,6 @@ module.exports = function (RED) {
       deviceNode.send({ payload: { attributeId, targetValue } });
     });
 
-    // TODO: change this to RED.events.on('nodes-started')
     setTimeout(() => {
       node.debug('starting udp server');
       discovery.start(config.name, node.debug);
@@ -108,6 +112,9 @@ module.exports = function (RED) {
 
   RED.httpAdmin.get('/homee-api/enums', (req, res) => res.send(enums));
   RED.httpAdmin.get('/homee-api/icons', (req, res) => res.send(icons));
+  RED.httpAdmin.get('/homee-api/template/:path', (req, res) => {
+    res.json(templates.find(req.params.path));
+  });
 
   RED.nodes.registerType('virtualHomee', VirtualHomeeNode, {
     credentials: {

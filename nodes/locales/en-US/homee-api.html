@@ -1,0 +1,31 @@
+<script type="text/html" data-help-name="homeeApi">
+    <p>Transmits and receives messages from your homee.</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt>homee <span class="property-type">node</span></dt>
+        <dd>Choose or create a homee configuration.</dd>
+    </dl>
+
+    <h3>Input</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>
+          <p>Messages to homee must be sent as string. An example to query the devices is <code>GET:nodes</code></p>
+        </dd>
+    </dl>
+
+    <h3>Output</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">json</span></dt>
+        <dd>
+          <p>Every message from homee is delivered as payload.</p>
+        </dd>
+    </dl>
+
+    <h3>References</h3>
+    <p>You will find more usefull hints and instructions at
+        <a href="https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeApiNode" title="Node-RED Contrib homee Wiki">
+        https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeApiNode</a>
+    </p>
+</script>

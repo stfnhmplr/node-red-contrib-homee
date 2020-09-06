@@ -1,12 +1,12 @@
 {
     "name": "node-red-contrib-homee",
-    "version": "0.6.0",
+    "version": "0.7.0-beta.0",
     "description": "access the homee api with node-red",
     "scripts": {
         "start": "node node_modules/node-red/red.js -v -u .",
         "lint": "./node_modules/.bin/eslint .",
         "lint:fix": "npm run lint -- --fix",
-        "test": "mocha \"test/**/*.test.js\""
+        "test": "mocha --exit \"test/**/*_spec.js\""
     },
     "keywords": [
         "node-red",
@@ -17,22 +17,23 @@
     "dependencies": {
         "body-parser": "^1.19.0",
         "express": "^4.17.1",
-        "homee-api": "^0.15.3",
-        "ws": "^7.2.3"
+        "homee-api": "^0.15.4",
+        "ws": "^7.3.1"
     },
     "devDependencies": {
         "eslint": "^6.8.0",
-        "eslint-config-airbnb-base": "^14.1.0",
-        "eslint-plugin-import": "^2.20.1",
-        "node-red": "^1.0.4",
-        "node-red-node-test-helper": "^0.2.3"
+        "eslint-config-airbnb-base": "^14.2.0",
+        "eslint-plugin-html": "^6.0.3",
+        "eslint-plugin-import": "^2.22.0",
+        "node-red": "^1.1.3",
+        "node-red-node-test-helper": "^0.2.5"
     },
     "node-red": {
         "nodes": {
             "homee": "nodes/homee.js",
-            "homeeApi": "nodes/homeeApi.js",
-            "virtualHomee": "nodes/virtualHomee.js",
-            "homeeDevice": "nodes/homeeDevice.js"
+            "homeeApi": "nodes/homee-api.js",
+            "virtualHomee": "nodes/virtual-homee.js",
+            "homeeDevice": "nodes/homee-device.js"
         }
     },
     "engines": {

@@ -1,0 +1,11 @@
+{
+  "virtualHomee": {
+    "error": {
+      "attributes-not-unique": "Attribute Ids must be unique!"
+    },
+    "label": {
+      "password": "Password",
+      "username": "Username"
+    }
+  }
+}
