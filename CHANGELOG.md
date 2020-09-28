@@ -1,6 +1,12 @@
 # Changelog
 
-## [0.7.0] -
+## [0.7.1] - 2020-09-28
+### Changed
+- Fixed some typos
+- Fixed broken api urls when node-red does not run at root path
+- Disabled export of the homee-api configuration node
+
+## [0.7.0] - 2020-09-06
 ### Added
 - Added german translation
 - homeeApi node: added filter options for outgoing messages
