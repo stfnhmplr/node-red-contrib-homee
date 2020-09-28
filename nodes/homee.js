@@ -22,9 +22,7 @@ module.exports = function (RED) {
       });
     }
 
-    this.homee.on('error', (err) => {
-      node.log(err);
-    });
+    this.homee.on('error', (err) => node.log(err));
 
     this.homee.connect().then(() => {
       node.log('connected to homee');
@@ -32,9 +30,7 @@ module.exports = function (RED) {
       node.error(err);
     });
 
-    this.on('close', () => {
-      this.homee.disconnect();
-    });
+    this.on('close', () => this.homee.disconnect());
   }
 
   RED.nodes.registerType('homee', HomeeNode, {
