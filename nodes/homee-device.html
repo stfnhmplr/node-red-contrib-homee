@@ -26,7 +26,7 @@
       const node = this;
       if (node['virtual-homee']) $('#homee-deploy-hint').hide();
 
-      const res1 = await fetch('/homee-api/enums');
+      const res1 = await fetch('homee-api/enums');
       const enums = await res1.json();
 
       const profileField = $('#node-input-profile');
@@ -102,7 +102,7 @@
 
           typeField.change(async () => {
             try {
-              const res = await fetch(`/homee-api/template/attribute.profile.${typeField.val()}`);
+              const res = await fetch(`homee-api/template/attribute.profile.${typeField.val()}`);
               const attributeTemplate = await res.json();
               Object.keys(attributeTemplate).forEach((key) => {
                 if (Object.hasOwnProperty.call(attribute, key)) {
@@ -146,7 +146,7 @@
         $('#node-input-attribute-list').editableList('addItem', node.attributes[i]);
       }
 
-      const res2 = await fetch('/homee-api/icons');
+      const res2 = await fetch('homee-api/icons');
       const icons = await res2.json();
       const iconField = $('#node-input-icon');
 
