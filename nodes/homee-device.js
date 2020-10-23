@@ -131,7 +131,7 @@ module.exports = function (RED) {
      * @return {void}
      */
     this.updateAttribute = (id, value, data) => {
-      if (typeof id !== 'number' || typeof value !== 'number') {
+      if (typeof id !== 'number' || (typeof value !== 'number' && !data)) {
         node.warn(RED._('homeeDevice.warning.numeric-id-value'));
         return;
       }
