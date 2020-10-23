@@ -55,7 +55,7 @@
           // eslint-disable-next-line no-param-reassign
           listItem.updateJson = (attributeData) => {
             // eslint-disable-next-line
-            const { id, type, node_id, ...other } = attributeData;
+            const { id, node_id, ...other } = attributeData;
             html.find('.node-input-attribute-json').typedInput('value', JSON.stringify(other));
           };
 
@@ -113,6 +113,8 @@
               listItem.updateInfo(attribute);
             } catch (e) {
               RED.notify(node._('homeeDevice.warning.attribute-template-not-found'), 'warning');
+              attribute.type = parseInt(typeField.val(), 10);
+              listItem.updateJson(attribute);
             }
           });
 
@@ -128,6 +130,7 @@
               }
             });
 
+            typeField.val(attribute.type);
             listItem.updateInfo(attribute);
           });
 
