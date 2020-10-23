@@ -16,13 +16,12 @@
     icon: 'homee-logo.svg',
     inputs: 1,
     outputs: 1,
-    inputLabels: function () { return this._('homeeDevice.label.node-input') },
-    outputLabels: function () { return this._('homeeDevice.label.node-output') },
-    label: function () {
-      return `${this.name || 'homeeDevice'} ${this.showNodeId ? `(${this.nodeId})` : ''}`
+    inputLabels() { return this._('homeeDevice.label.node-input'); },
+    outputLabels() { return this._('homeeDevice.label.node-output'); },
+    label() {
+      return `${this.name || 'homeeDevice'} ${this.showNodeId ? `(${this.nodeId})` : ''}`;
     },
-    // eslint-disable-next-line
-    oneditprepare: async function () {
+    async oneditprepare() {
       const node = this;
       if (node['virtual-homee']) $('#homee-deploy-hint').hide();
 
@@ -139,9 +138,23 @@
           listItem.append(html);
         },
         removable: true,
+        sortable: true,
+        sortItems: (items) => {
+          const attributeIds = items.map((index, item) => {
+            const val = item.find('.node-input-attribute-id').val();
+            return parseInt(val, 10);
+          });
+          attributeIds.sort((a, b) => a - b);
+
+          items.each((key, item) => {
+            item.find('.node-input-attribute-id').val(attributeIds[key]);
+          });
+        },
       });
 
       if (typeof node.attributes === 'string') node.attributes = JSON.parse(node.attributes);
+      node.attributes.sort((a, b) => a.id - b.id);
+
       for (let i = 0; i < node.attributes.length; i += 1) {
         $('#node-input-attribute-list').editableList('addItem', node.attributes[i]);
       }
@@ -160,16 +173,15 @@
       $('#node-input-profile').val(this.profile);
       $('#node-input-icon').val(this.icon);
     },
-    // eslint-disable-next-line
-    oneditsave: function () {
+    oneditsave() {
       const node = this;
+      const listItems = $('#node-input-attribute-list').editableList('items');
       node.attributes = [];
 
-      const attributes = $('#node-input-attribute-list').editableList('items');
-      attributes.each(function () {
-        const attribute = JSON.parse($(this).find('.node-input-attribute-json').typedInput('value'));
-        attribute.id = parseInt($(this).find('.node-input-attribute-id').val(), 10);
-        attribute.type = parseInt($(this).find('.node-input-attribute-type').val(), 10);
+      listItems.each((index, item) => {
+        const attribute = JSON.parse(item.find('.node-input-attribute-json').typedInput('value'));
+        attribute.id = parseInt(item.find('.node-input-attribute-id').val(), 10);
+        attribute.type = parseInt(item.find('.node-input-attribute-type').val(), 10);
         attribute.node_id = parseInt($('#node-input-nodeId').val(), 10);
         attribute.unit = encodeURIComponent(attribute.unit);
         node.attributes.push(attribute);
