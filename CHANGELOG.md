@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0]
+## Added
+- Attributes can now be sorted. Ids will be automatically adjusted when sorting.
+### Changed
+- The `data` attribute can now be updated without specifying a `value`.
+- The attribute type can now be set individually using the expert mode.
+
 ## [0.7.1] - 2020-09-28
 ### Changed
 - Fixed some typos
