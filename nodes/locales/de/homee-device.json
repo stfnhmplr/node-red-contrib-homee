@@ -220,7 +220,9 @@
 			"CANodeProfileInovaMotionDetector": "Inova Bewegungsmelder",
 			"CANodeProfileWashingMachine": "Waschmaschine",
 			"CANodeProfileTumbleDryer": "Trockner",
-			"CANodeProfileDishwasher": "Geschirrspüler"
+			"CANodeProfileDishwasher": "Geschirrspüler",
+			"CANodeProfileEntranceDoor": "Haustür",
+			"CANodeProfileWindowMotorSwitch": "Fenstermotor Schalter"
 		},
 		"attribute": {
 	    "CAAttributeTypeNone": "Keins",
@@ -505,7 +507,19 @@
 	    "CAAttributeTypeProcessorUtilization": "Prozessorauslastung",
 	    "CAAttributeTypeUsedStorage": "Verwendeter Speicher",
 	    "CAAttributeTypeExternalTemperature": "Außentemperatur",
-	    "CAAttributeTypeFloorTemperature": "Bodentemperatur"
+	    "CAAttributeTypeFloorTemperature": "Bodentemperatur",
+			"CAAttributeTypeRainfallIntensity": "Regenintensität",
+			"CAAttributeTypeCurrentElectricityPrice": "Aktueller Energiepreis",
+    	"CAAttributeTypeHighestElectricityPrice": "Höchster Energiepreis",
+    	"CAAttributeTypeLowestElectricityPrice": "Niedrigster Energiepreis",
+    	"CAAttributeTypeCurrentEnergyConsumption": "Aktueller Energieverbrauch",
+    	"CAAttributeTypeCurrentCosts": "Aktuelle Kosten",
+			"CAAttributeTypeEndPositionConfiguration": "Endpositionskonfiguration",
+    	"CAAttributeTypeAutomaticModeImpulse": "Impuls im Automatikmodus",
+    	"CAAttributeTypeBrieflyOpenImpulse": "Kurzzeitiger offen Impuls",
+    	"CAAttributeTypePermanentlyOpenImpulse": "Dauerhaft offen Impuls",
+    	"CAAttributeTypeWindThreshold": "Windschwelle",
+    	"CAAttributeTypeSlatRotationImpulse": "Lamellenrotationsimpuls"
 		}
 	}
 }
