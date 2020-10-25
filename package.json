@@ -1,7 +1,7 @@
 {
     "name": "node-red-contrib-homee",
     "version": "0.7.1",
-    "description": "access the homee api with node-red",
+    "description": "create virtual devices for homee and access api with node-red",
     "scripts": {
         "start": "node node_modules/node-red/red.js -v -u .",
         "lint": "./node_modules/.bin/eslint .",
