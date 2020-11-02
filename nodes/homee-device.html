@@ -160,7 +160,9 @@
       node.attributes.sort((a, b) => a.id - b.id);
 
       for (let i = 0; i < node.attributes.length; i += 1) {
-        $('#node-input-attribute-list').editableList('addItem', node.attributes[i]);
+        $('#node-input-attribute-list').editableList('addItem', JSON.parse(
+          JSON.stringify(node.attributes[i]),
+        ));
       }
 
       const res2 = await fetch('homee-api/icons');
