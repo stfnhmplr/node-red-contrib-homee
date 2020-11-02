@@ -67,13 +67,6 @@ module.exports = function (RED) {
         return;
       }
 
-      if ('id' in msg.payload && 'value' in msg.payload) {
-        node.warn(`using an object with id and value is deprecated.
-          You'll find the new syntax in the README.`);
-        this.updateAttribute(msg.payload.id, msg.payload.value);
-        return;
-      }
-
       Object.keys(msg.payload).forEach((key) => {
         switch (key) {
           case 'attribute':
