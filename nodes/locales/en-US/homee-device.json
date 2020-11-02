@@ -17,6 +17,7 @@
 		"warning": {
 			"invalid-payload": "Only JSON-Objects are valid payloads. Ignoring message.",
 			"numeric-id-value": "Id and value must be numeric. Ignoring message.",
+			"data-string": "Data must be a string. Ignoring message.",
 			"attribute-not-found": "Can't find attribute with id",
 			"value-exceeds-min-max": "Can't update attribute. The provided value must be between",
 			"and": "and",

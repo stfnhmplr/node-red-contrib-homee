@@ -17,6 +17,7 @@
 		"warning": {
 			"invalid-payload": "Der Payload enthält kein gültiges JSON. Die Nachricht wurde ignoriert.",
 			"numeric-id-value": "Id und value müssen numerisch sein. Die Nachricht wurde ignoriert.",
+			"data-string": "Data muss ein Text sein. Die Nachricht wurde ignoriert.",
 			"attribute-not-found": "Ein Attribut konnte nicht gefunden werden. ID ",
 			"value-exceeds-min-max": "Das Attribut kann nicht aktualisiert werden. Der Wert liegt außerhalb des gültigen Bereichs zwischen",
 			"and": "und",

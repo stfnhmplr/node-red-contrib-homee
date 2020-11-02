@@ -160,7 +160,6 @@ describe('homeeDevice Node', () => {
         payload: {
           attribute: {
             id: 1,
-            value: 1,
             data: 'node-red',
           },
         },
