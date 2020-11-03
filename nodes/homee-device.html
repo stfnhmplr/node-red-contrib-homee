@@ -190,6 +190,11 @@
         attribute.type = parseInt(item.find('.node-input-attribute-type').val(), 10);
         attribute.node_id = parseInt($('#node-input-nodeId').val(), 10);
         attribute.unit = encodeURIComponent(attribute.unit);
+
+        const doubleInstance = node.attributes.filter((a) => a.type === attribute.type
+          && a.instance === attribute.instance);
+        if (doubleInstance.length) RED.notify(node._('homeeDevice.error.double-instance'), 'error');
+
         node.attributes.push(attribute);
       });
     },

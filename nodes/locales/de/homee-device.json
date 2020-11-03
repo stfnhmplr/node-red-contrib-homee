@@ -9,10 +9,11 @@
 			"node-output": "Statusmitteilungen",
 			"status-template": "Status Template"
 		},
-		"errors": {
-			"homee-node-id": "Die Node-ID darf nicht -1 sein",
-			"attributes-must-be-array": "Die Attribute müssen als Array angegeben werden",
-			"node-ids-dont-match": "Die Node-ID von mindestens einem Attribut stimmt nicht mit der Node-ID überein"
+		"error": {
+			"homee-node-id": "Die Node-ID darf nicht -1 sein.",
+			"attributes-must-be-array": "Die Attribute müssen als Array angegeben werden.",
+			"node-ids-dont-match": "Die Node-ID von mindestens einem Attribut stimmt nicht mit der Node-ID überein.",
+			"double-instance": "Es gibt mehrere Attribute gleichen Typs, deren Instanz übereinstimmt. Bei gleichem Typ muss sich die Instanz unterscheiden, damit das zweite Attribut in homee dargestellt wird."
 		},
 		"warning": {
 			"invalid-payload": "Der Payload enthält kein gültiges JSON. Die Nachricht wurde ignoriert.",

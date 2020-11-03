@@ -10,9 +10,10 @@
 			"status-template": "Status template"
 		},
 		"error": {
-			"homee-node-id": "The node id must not be -1",
-			"attributes-must-be-array": "Attributes must be an array",
-			"node-ids-dont-match": "The node id of at least one attribute does not match the device node id"
+			"homee-node-id": "The node id must not be -1.",
+			"attributes-must-be-array": "Attributes must be an array.",
+			"node-ids-dont-match": "The node id of at least one attribute does not match the device node id.",
+			"double-instance": "There are several attributes of the same type whose instance matches. If the type is the same, the instance must be different, otherwise the second attribute is not displayed in homee."
 		},
 		"warning": {
 			"invalid-payload": "Only JSON-Objects are valid payloads. Ignoring message.",
@@ -21,7 +22,7 @@
 			"attribute-not-found": "Can't find attribute with id",
 			"value-exceeds-min-max": "Can't update attribute. The provided value must be between",
 			"and": "and",
-			"invalid-message": "Invalid message. Please check the Readme/Wiki. Ignoring message",
+			"invalid-message": "Invalid message. Please check the Readme/Wiki. Ignoring message.",
 			"attribute-template-not-found": "No template found. Please use the edit function to properly configure the attribute."
 		},
 		"icon": {
