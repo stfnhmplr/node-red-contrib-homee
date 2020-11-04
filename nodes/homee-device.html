@@ -16,13 +16,12 @@
     icon: 'homee-logo.svg',
     inputs: 1,
     outputs: 1,
-    inputLabels: function () { return this._('homeeDevice.label.node-input') },
-    outputLabels: function () { return this._('homeeDevice.label.node-output') },
-    label: function () {
-      return `${this.name || 'homeeDevice'} ${this.showNodeId ? `(${this.nodeId})` : ''}`
+    inputLabels() { return this._('homeeDevice.label.node-input'); },
+    outputLabels() { return this._('homeeDevice.label.node-output'); },
+    label() {
+      return `${this.name || 'homeeDevice'} ${this.showNodeId ? `(${this.nodeId})` : ''}`;
     },
-    // eslint-disable-next-line
-    oneditprepare: async function () {
+    async oneditprepare() {
       const node = this;
       if (node['virtual-homee']) $('#homee-deploy-hint').hide();
 
@@ -56,7 +55,7 @@
           // eslint-disable-next-line no-param-reassign
           listItem.updateJson = (attributeData) => {
             // eslint-disable-next-line
-            const { id, type, node_id, ...other } = attributeData;
+            const { id, node_id, ...other } = attributeData;
             html.find('.node-input-attribute-json').typedInput('value', JSON.stringify(other));
           };
 
@@ -72,6 +71,7 @@
             target_value: 0,
             last_value: 0,
             data: '',
+            name: '',
             unit: 'n%2Fa',
             step_value: 1,
             editable: 0,
@@ -114,6 +114,8 @@
               listItem.updateInfo(attribute);
             } catch (e) {
               RED.notify(node._('homeeDevice.warning.attribute-template-not-found'), 'warning');
+              attribute.type = parseInt(typeField.val(), 10);
+              listItem.updateJson(attribute);
             }
           });
 
@@ -129,6 +131,7 @@
               }
             });
 
+            typeField.val(attribute.type);
             listItem.updateInfo(attribute);
           });
 
@@ -139,11 +142,27 @@
           listItem.append(html);
         },
         removable: true,
+        sortable: true,
+        sortItems: (items) => {
+          const attributeIds = items.map((index, item) => {
+            const val = item.find('.node-input-attribute-id').val();
+            return parseInt(val, 10);
+          });
+          attributeIds.sort((a, b) => a - b);
+
+          items.each((key, item) => {
+            item.find('.node-input-attribute-id').val(attributeIds[key]);
+          });
+        },
       });
 
       if (typeof node.attributes === 'string') node.attributes = JSON.parse(node.attributes);
+      node.attributes.sort((a, b) => a.id - b.id);
+
       for (let i = 0; i < node.attributes.length; i += 1) {
-        $('#node-input-attribute-list').editableList('addItem', node.attributes[i]);
+        $('#node-input-attribute-list').editableList('addItem', JSON.parse(
+          JSON.stringify(node.attributes[i]),
+        ));
       }
 
       const res2 = await fetch('homee-api/icons');
@@ -160,18 +179,22 @@
       $('#node-input-profile').val(this.profile);
       $('#node-input-icon').val(this.icon);
     },
-    // eslint-disable-next-line
-    oneditsave: function () {
+    oneditsave() {
       const node = this;
+      const listItems = $('#node-input-attribute-list').editableList('items');
       node.attributes = [];
 
-      const attributes = $('#node-input-attribute-list').editableList('items');
-      attributes.each(function () {
-        const attribute = JSON.parse($(this).find('.node-input-attribute-json').typedInput('value'));
-        attribute.id = parseInt($(this).find('.node-input-attribute-id').val(), 10);
-        attribute.type = parseInt($(this).find('.node-input-attribute-type').val(), 10);
+      listItems.each((index, item) => {
+        const attribute = JSON.parse(item.find('.node-input-attribute-json').typedInput('value'));
+        attribute.id = parseInt(item.find('.node-input-attribute-id').val(), 10);
+        attribute.type = parseInt(item.find('.node-input-attribute-type').val(), 10);
         attribute.node_id = parseInt($('#node-input-nodeId').val(), 10);
         attribute.unit = encodeURIComponent(attribute.unit);
+
+        const doubleInstance = node.attributes.filter((a) => a.type === attribute.type
+          && a.instance === attribute.instance);
+        if (doubleInstance.length) RED.notify(node._('homeeDevice.error.double-instance'), 'error');
+
         node.attributes.push(attribute);
       });
     },

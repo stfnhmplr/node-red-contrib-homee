@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.8.0]
+## Added
+- Attributes can now be sorted. Ids will be automatically adjusted when sorting.
+- Added `name` param to new attributes.
+- Validation for instances on attributes with the same type
+### Changed
+- The `data` attribute can now be updated without specifying a `value`.
+- The attribute type can now be set individually using the expert mode.
+- Removed deprecated syntax for changing attributes
+
 ## [0.7.1] - 2020-09-28
 ### Changed
 - Fixed some typos

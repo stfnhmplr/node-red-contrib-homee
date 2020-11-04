@@ -67,13 +67,6 @@ module.exports = function (RED) {
         return;
       }
 
-      if ('id' in msg.payload && 'value' in msg.payload) {
-        node.warn(`using an object with id and value is deprecated.
-          You'll find the new syntax in the README.`);
-        this.updateAttribute(msg.payload.id, msg.payload.value);
-        return;
-      }
-
       Object.keys(msg.payload).forEach((key) => {
         switch (key) {
           case 'attribute':
@@ -131,8 +124,13 @@ module.exports = function (RED) {
      * @return {void}
      */
     this.updateAttribute = (id, value, data) => {
-      if (typeof id !== 'number' || typeof value !== 'number') {
+      if (typeof id !== 'number' || (typeof value !== 'number' && typeof data === 'undefined')) {
         node.warn(RED._('homeeDevice.warning.numeric-id-value'));
+        return;
+      }
+
+      if (typeof data !== 'undefined' && typeof data !== 'string') {
+        node.warn(RED._('homeeDevice.warning.data-string'));
         return;
       }
 
@@ -144,32 +142,33 @@ module.exports = function (RED) {
         return;
       }
 
-      node.debug(`updating attribute #${id} to value: ${value}`);
-
-      if (value < attribute.minimum || value > attribute.maximum) {
-        node.warn(`${RED._('homeeDevice.warning.value-exceeds-min-max')} ${attribute.minimum} ${RED._('homeeDevice.warning.and')} ${attribute.maximum}`);
-        return;
-      }
-
-      if (attribute.target_value === value && attribute.last_changed + 2 > unixTimestamp) {
-        node.debug(`Attribute #${id} was updated within the last two seconds.`);
-      }
-
-      // first update target value only
-      attribute.target_value = value;
-      this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
-
       // save data if it is set
-      if (typeof data !== 'undefined') {
-        attribute.data = data;
+      if (typeof data === 'string') attribute.data = data;
+
+      if (typeof value === 'number') {
+        node.debug(`updating attribute #${id} to value: ${value}`);
+
+        if (value < attribute.minimum || value > attribute.maximum) {
+          node.warn(`${RED._('homeeDevice.warning.value-exceeds-min-max')} ${attribute.minimum} ${RED._('homeeDevice.warning.and')} ${attribute.maximum}`);
+          return;
+        }
+
+        if (attribute.target_value === value && attribute.last_changed + 2 > unixTimestamp) {
+          node.debug(`Attribute #${id} was updated within the last two seconds.`);
+        }
+
+        // first update target value only
+        attribute.target_value = value;
+        this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+
+        // next update current_value
+        attribute.last_value = attribute.current_value;
+        attribute.current_value = value;
+        attribute.last_changed = unixTimestamp;
+        this.status({ fill: 'green', shape: 'dot', text: this.device.statusString(this.statusTemplate) });
       }
 
-      // next update current_value
-      attribute.last_value = attribute.current_value;
-      attribute.current_value = value;
-      attribute.last_changed = unixTimestamp;
       this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
-      this.status({ fill: 'green', shape: 'dot', text: this.device.statusString(this.statusTemplate) });
     };
   }
 
