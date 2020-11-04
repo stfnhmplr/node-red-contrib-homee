@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.8.0]
+## [0.8.0] - 2020-11-04
 ## Added
 - Attributes can now be sorted. Ids will be automatically adjusted when sorting.
 - Added `name` param to new attributes.
