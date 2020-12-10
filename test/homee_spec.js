@@ -10,10 +10,11 @@ describe('homee Node', () => {
   after((done) => helper.stopServer(done));
   afterEach(() => helper.unload());
 
-  it('should be loaded', (done) => {
-    const flow = [{ id: 'n1', type: 'homee', name: 'homee' }];
+  // eslint-disable-next-line
+  const defaultFlow = [{ id: 'n1', type: 'homee', name: 'homee', device: 'NodeRedTest' }];
 
-    helper.load(homeeNode, flow, () => {
+  it('should be loaded', (done) => {
+    helper.load(homeeNode, defaultFlow, () => {
       const n1 = helper.getNode('n1');
       n1.should.have.property('name', 'homee');
       done();
@@ -21,8 +22,8 @@ describe('homee Node', () => {
   });
 
   it('should store data in the global context if configured', (done) => {
-    // eslint-disable-next-line
-    const flow = [{ id: 'n1', type: 'homee', name: 'homee', globalContext: true }];
+    const flow = JSON.parse(JSON.stringify(defaultFlow));
+    flow[0].globalContext = true;
 
     helper.load(homeeNode, flow, () => {
       const n1 = helper.getNode('n1');
@@ -40,10 +41,16 @@ describe('homee Node', () => {
     });
   });
 
-  it('should close the connection to homee if the node closes', (done) => {
-    const flow = [{ id: 'n1', type: 'homee', name: 'homee' }];
+  it('should set a custom device id', (done) => {
+    helper.load(homeeNode, defaultFlow, () => {
+      const n1 = helper.getNode('n1');
+      n1.homee.should.have.property('deviceId', 'node-red-test');
+      done();
+    });
+  });
 
-    helper.load(homeeNode, flow, () => {
+  it('should close the connection to homee if the node closes', (done) => {
+    helper.load(homeeNode, defaultFlow, () => {
       const n1 = helper.getNode('n1');
       const homeeDisconnect = sinon.spy(n1.homee, 'disconnect');
 

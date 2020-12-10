@@ -3,6 +3,7 @@
         "label": {
           "username": "Username",
           "password": "Password",
+          "device-id": "Device-ID",
           "globalcontext": "Make homee data available via global context"
         }
     }

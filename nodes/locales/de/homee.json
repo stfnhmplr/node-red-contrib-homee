@@ -3,6 +3,7 @@
         "label": {
           "username": "Benutzername",
           "password": "Passwort",
+          "device-id": "Geräte-ID",
           "globalcontext": "Stelle die Daten im globalen Kontext bereit"
         }
     }

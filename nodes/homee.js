@@ -7,7 +7,7 @@ module.exports = function (RED) {
     const node = this;
 
     this.homee = new Homee(config.host, this.credentials.user, this.credentials.pass, {
-      device: 'Node-RED',
+      device: config.device,
       reconnect: true,
       reconnectInterval: 5000,
       maxRetries: Infinity,

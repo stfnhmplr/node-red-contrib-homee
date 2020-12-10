@@ -14,7 +14,7 @@ describe('homeeApi Node', () => {
   afterEach(() => helper.unload());
 
   // eslint-disable-next-line
-  const defaultFlow = [{ id: 'n1', type: 'homee', name: 'homee', host: '192.168.178.109', globalContext: false }, { id: 'n2', type: 'homeeApi', homee: 'n1', name: 'homeeApi' }];
+  const defaultFlow = [{ id: 'n1', type: 'homee', name: 'homee', host: '192.168.178.109', globalContext: false, device: 'NodeRedTest' }, { id: 'n2', type: 'homeeApi', homee: 'n1', name: 'homeeApi' }];
 
   it('should be loaded', (done) => {
     helper.load([homeeApiNode, homeeNode], defaultFlow, () => {

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.1] - 2020-10-12
+## Changed
+- Since version 2.31.0 homee allows only one connection per device. For the use of multiple Node-RED instances, a unique device name can now be specified.
+
 ## [0.8.0] - 2020-11-04
 ## Added
 - Attributes can now be sorted. Ids will be automatically adjusted when sorting.

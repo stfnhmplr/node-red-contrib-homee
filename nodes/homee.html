@@ -1,21 +1,21 @@
 <script type="text/javascript">
-    RED.nodes.registerType('homee', {
-        category: 'config',
-        color: '#a6bbcf',
-        defaults: {
-            name: { value: '' },
-            host: { value: '' },
-            globalContext: { value: true },
-        },
-        credentials: {
-            user: { type: 'text' },
-            pass: { type: 'password' }
-        },
-        exportable: false,
-        label: function() {
-            return this.name || 'homee';
-        }
-    });
+  /* eslint-disable no-undef */
+  RED.nodes.registerType('homee', {
+    category: 'config',
+    color: '#a6bbcf',
+    defaults: {
+      name: { value: '' },
+      host: { value: '' },
+      device: { value: 'Node-RED', validate: RED.validators.regex(/^[0-z,\s]+$/) },
+      globalContext: { value: true },
+    },
+    credentials: {
+      user: { type: 'text' },
+      pass: { type: 'password' },
+    },
+    exportable: false,
+    label() { return this.name || 'homee'; },
+  });
 </script>
 
 <script type="text/x-red" data-template-name="homee">
@@ -26,6 +26,10 @@
     <div class="form-row">
         <label for="node-config-input-host" style="width: 130px;"><i class="fa fa-globe"></i> IP/Host</label>
         <input type="text" id="node-config-input-host" placeholder="Host">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-device" style="width: 130px;"><i class="fa fa-laptop-code"></i> <span data-i18n="homee.label.device-id"></span></label>
+        <input type="text" id="node-config-input-device" placeholder="Node-RED">
     </div>
     <div class="form-row">
         <label for="node-config-input-user" style="width: 130px;"><i class="fa fa-user"></i> <span data-i18n="homee.label.username"></span></label>
