@@ -24,9 +24,10 @@ module.exports = function (RED) {
 
       if (!Array.isArray(this.attributes)) throw new Error(RED._('homeeDevice.error.attributes-must-be-array'));
 
-      if (this.attributes.filter((a) => a.node_id !== this.nodeId).length) {
-        throw new Error(RED._('homeeDevice.error.node-ids-dont-match'));
-      }
+      this.attributes.forEach((a) => {
+        a.node_id = this.nodeId;
+        a.id = parseInt(a.id, 10);
+      });
 
       if (this.storageConfigured) {
         node.context().get('attributes', 'homeeStore', (err, attributes) => {

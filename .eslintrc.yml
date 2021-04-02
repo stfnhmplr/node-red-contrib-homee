@@ -12,8 +12,11 @@ globals:
   SharedArrayBuffer: readonly
 parserOptions:
   ecmaVersion: 2018
-rules: {}
 overrides:
   - files: test/*_spec.js
     env:
       mocha: true
+rules:
+  no-param-reassign:
+    - error
+    - props: false

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.0] -
+## Changed
+- Some input fields have been replaced by typed inputs to allow the use of environment variables. Thus, subflows can now be used for device definition.
+
 ## [0.8.1] - 2020-10-12
 ## Changed
 - Since version 2.31.0 homee allows only one connection per device. For the use of multiple Node-RED instances, a unique device name can now be specified.

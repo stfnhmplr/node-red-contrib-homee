@@ -28,6 +28,9 @@
       const res1 = await fetch('homee-api/enums');
       const enums = await res1.json();
 
+      $('#node-input-name').typedInput({ default: 'str', types: ['str', 'env'] });
+      $('#node-input-nodeId').typedInput({ default: 'num', types: ['num', 'env'] });
+
       const profileField = $('#node-input-profile');
       Object.keys(enums.CANodeProfile).forEach((profile) => {
         $('<option/>')
@@ -43,6 +46,7 @@
           const typeField = html.find('.node-input-attribute-type');
           const jsonField = html.find('.node-input-attribute-json');
           const nodeId = parseInt($('#node-input-nodeId').val(), 10);
+          idField.typedInput({ default: 'num', types: ['num', 'env'] })
           jsonField.typedInput({ default: 'json', types: ['json'] });
 
           // eslint-disable-next-line no-param-reassign
@@ -54,7 +58,6 @@
 
           // eslint-disable-next-line no-param-reassign
           listItem.updateJson = (attributeData) => {
-            // eslint-disable-next-line
             const { id, node_id, ...other } = attributeData;
             html.find('.node-input-attribute-json').typedInput('value', JSON.stringify(other));
           };
@@ -95,7 +98,7 @@
               .appendTo(typeField);
           });
 
-          idField.val(attribute.id);
+          idField.typedInput('value', attribute.id);
           typeField.val(attribute.type);
           listItem.updateJson(attribute);
           listItem.updateInfo(attribute);
@@ -120,7 +123,7 @@
           });
 
           idField.change(() => {
-            attribute.id = parseInt(idField.val(), 10);
+            attribute.id = idField.val();
           });
 
           jsonField.on('change', () => {
@@ -186,9 +189,9 @@
 
       listItems.each((index, item) => {
         const attribute = JSON.parse(item.find('.node-input-attribute-json').typedInput('value'));
-        attribute.id = parseInt(item.find('.node-input-attribute-id').val(), 10);
+        attribute.id = item.find('.node-input-attribute-id').val();
         attribute.type = parseInt(item.find('.node-input-attribute-type').val(), 10);
-        attribute.node_id = parseInt($('#node-input-nodeId').val(), 10);
+        attribute.node_id = $('#node-input-nodeId').val();
         attribute.unit = encodeURIComponent(attribute.unit);
 
         const doubleInstance = node.attributes.filter((a) => a.type === attribute.type
@@ -213,7 +216,7 @@
     </div>
     <div class="form-row">
         <label for="node-input-nodeId"><i class="fa fa-hashtag"></i> Node-ID</label>
-        <input type="number" id="node-input-nodeId" placeholder="Node-ID" style="width: 70%">
+        <input id="node-input-nodeId" placeholder="Node-ID" style="width: 70%">
     </div>
     <div class="form-row">
         <label for="node-input-showNodeId"></label>
@@ -245,23 +248,23 @@
 
 <template id="homee-attributes-template">
   <div style="display: flex; width: 100%;">
-    <div style="width: 20%; padding-right: 10px;">
-      <input class="node-input-attribute-id" type="number" placeholder="ID" style="width: 100%;"/>
+    <div style="width: 25%; padding-right: 10px;">
+      <input class="node-input-attribute-id" placeholder="ID" style="width: 100%;"/>
     </div>
     <div style="width: 40%; padding-right: 10px;">
       <select class="node-input-attribute-type" style="width: 100%;"></select>
     </div>
-    <div class="node-input-attribute-infos" style="display: flex; flex-wrap: wrap; line-height: 16px; font-size: 12px; width: 35%; margin-right: 10px;">
-      <span class="node-input-attribute-minimum" style="width: 50%;">
+    <div class="node-input-attribute-infos" style="display: flex; flex-wrap: wrap; line-height: 16px; font-size: 12px; width: 30%; padding-right: 5px;">
+      <span class="node-input-attribute-minimum" style="width: 60%;">
         Min: <code style="font-size: 12px;">0</code>
       </span>
-      <span class="node-input-attribute-unit" style="width: 50%;">
+      <span class="node-input-attribute-unit" style="width: 40%;">
         Unit: <code style="font-size: 12px;">n/A</code>
       </span>
-      <span class="node-input-attribute-maximum" style="width: 50%;">
+      <span class="node-input-attribute-maximum" style="width: 60%;">
         Max: <code style="font-size: 12px;">1</code>
       </span>
-      <span class="node-input-attribute-step_value" style="width: 50%;">
+      <span class="node-input-attribute-step_value" style="width: 40%;">
         Step: <code style="font-size: 12px;">1</code>
       </span>
     </div>

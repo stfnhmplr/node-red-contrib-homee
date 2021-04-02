@@ -75,17 +75,14 @@ module.exports = function (RED) {
     });
 
     this.api.on('PUT:attributes', (attributeId, deviceId, targetValue) => {
-      let deviceNode;
+      const deviceNode = RED.nodes.getNode(this.attributeMap[attributeId]);
 
-      try {
-        deviceNode = RED.nodes.getNode(this.attributeMap[attributeId]);
-      } catch (e) {
-        node.error(e);
-        return;
+      if (!deviceNode) {
+        node.error(new Error(`Can't find device node with attribute id ${attributeId}`));
+      } else {
+        deviceNode.updateAttribute(attributeId, targetValue);
+        deviceNode.send({ payload: { attributeId, targetValue } });
       }
-
-      deviceNode.updateAttribute(attributeId, targetValue);
-      deviceNode.send({ payload: { attributeId, targetValue } });
     });
 
     setTimeout(() => {
