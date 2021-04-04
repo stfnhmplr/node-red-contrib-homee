@@ -3,6 +3,7 @@
 ## [0.9.0] -
 ## Changed
 - Some input fields have been replaced by typed inputs to allow the use of environment variables. Thus, subflows can now be used for device definition.
+- In the Api Node it is now possible to filter for messages about plans. In addition, the plans are now also provided in the global context.
 
 ## [0.8.1] - 2020-10-12
 ## Changed

@@ -6,7 +6,7 @@
         "start": "node node_modules/node-red/red.js -v -u .",
         "lint": "./node_modules/.bin/eslint .",
         "lint:fix": "npm run lint -- --fix",
-        "test": "mocha --exit \"test/**/*_spec.js\""
+        "test": "mocha --exit \"test/**/*.spec.js\""
     },
     "keywords": [
         "node-red",
@@ -17,7 +17,7 @@
     "dependencies": {
         "body-parser": "^1.19.0",
         "express": "^4.17.1",
-        "homee-api": "^0.17.0",
+        "homee-api": "^0.20.0",
         "ws": "^7.3.1"
     },
     "devDependencies": {

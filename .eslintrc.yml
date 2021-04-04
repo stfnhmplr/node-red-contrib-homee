@@ -13,7 +13,7 @@ globals:
 parserOptions:
   ecmaVersion: 2018
 overrides:
-  - files: test/*_spec.js
+  - files: test/*.spec.js
     env:
       mocha: true
 rules:

@@ -19,6 +19,7 @@ module.exports = function (RED) {
         node.context().global.set('homee.groups', node.homee.groups);
         node.context().global.set('homee.attributes', node.homee.attributes);
         node.context().global.set('homee.relationships', node.homee.relationships);
+        node.context().global.set('homee.plans', node.homee.plans);
       });
     }
 

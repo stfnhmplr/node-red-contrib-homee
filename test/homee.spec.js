@@ -32,11 +32,13 @@ describe('homee Node', () => {
           nodes: [{ id: 1 }],
           groups: [{ id: 2 }],
           relationships: [{ id: 3 }],
+          plans: [{ id: 4 }],
         },
       });
       n1.context().global.get('homee.nodes').should.be.eql([{ id: 1 }]);
       n1.context().global.get('homee.groups').should.be.eql([{ id: 2 }]);
       n1.context().global.get('homee.relationships').should.be.eql([{ id: 3 }]);
+      n1.context().global.get('homee.plans').should.be.eql([{ id: 4 }]);
       done();
     });
   });
