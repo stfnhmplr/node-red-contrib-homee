@@ -14,12 +14,27 @@ module.exports = function (RED) {
     });
 
     if (config.globalContext) {
-      this.homee.on('message', () => {
-        node.context().global.set('homee.nodes', node.homee.nodes);
-        node.context().global.set('homee.groups', node.homee.groups);
-        node.context().global.set('homee.attributes', node.homee.attributes);
-        node.context().global.set('homee.relationships', node.homee.relationships);
-        node.context().global.set('homee.plans', node.homee.plans);
+      this.homee.on('message', (message) => {
+        const [messageType] = Object.keys(message);
+        const storageKeys = [
+          'attributes',
+          'nodes',
+          'groups',
+          'homeegrams',
+          'plans',
+          'relationships',
+        ];
+
+        if (messageType === 'all') {
+          storageKeys.forEach((key) => node.context().global.set(`homee.${key}`, node.homee[key]));
+        } else if (['attribute', 'attributes', 'node', 'nodes'].includes(messageType)) {
+          node.context().global.set('homee.attributes', node.homee.attributes);
+          node.context().global.set('homee.nodes', node.homee.nodes);
+        } else if (['groups', 'homeegrams', 'plans', 'relationships'].includes(messageType)) {
+          node.context().global.set(`homee.${messageType}`, node.homee[messageType]);
+        } else if (['group', 'homeegram', 'plan', 'relationship'].includes(messageType)) {
+          node.context().global.set(`homee.${messageType}s`, node.homee[`${messageType}s`]);
+        }
       });
     }
 

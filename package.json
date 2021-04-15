@@ -17,7 +17,7 @@
     "dependencies": {
         "body-parser": "^1.19.0",
         "express": "^4.17.1",
-        "homee-api": "^0.20.0",
+        "homee-api": "^0.21.1",
         "ws": "^7.3.1"
     },
     "devDependencies": {
@@ -25,8 +25,8 @@
         "eslint-config-airbnb-base": "^14.2.0",
         "eslint-plugin-html": "^6.1.0",
         "eslint-plugin-import": "^2.22.1",
-        "node-red": "^1.2.6",
-        "node-red-node-test-helper": "^0.2.5"
+        "node-red": "^1.3.2",
+        "node-red-node-test-helper": "^0.2.7"
     },
     "node-red": {
         "nodes": {
