@@ -19,15 +19,7 @@ module.exports = function (RED) {
       RED.nodes.addCredentials(node.id, this.credentials);
     }
 
-    this.api = new VirtualHomee(
-      config.name,
-      this.credentials, {
-        log: node.log,
-        debug: node.debug,
-        error: node.error,
-        warn: node.warn,
-      },
-    );
+    this.api = new VirtualHomee(config.name, this.credentials, node);
 
     // homee expects at least one homee node
     this.devices = [new Device('homee', -1, 1, [], 'default')];
@@ -87,7 +79,7 @@ module.exports = function (RED) {
 
     setTimeout(() => {
       node.debug('starting udp server');
-      discovery.start(config.name, node.debug);
+      discovery.start(config.name, node);
 
       node.debug('starting virtual homee');
       this.api.start();
