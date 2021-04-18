@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.2] - 2021-04-18
+## Changed
+- Bugfix for Node-RED >= v. 1.3.0
+
 ## [0.8.1] - 2020-10-12
 ## Changed
 - Since version 2.31.0 homee allows only one connection per device. For the use of multiple Node-RED instances, a unique device name can now be specified.
