@@ -1,9 +1,9 @@
 # Changelog
 
-## [0.9.0] -
+## [0.9.0] - 2021-04-28
 ## Changed
 - Some input fields have been replaced by typed inputs to allow the use of environment variables. Thus, subflows can now be used for device definition.
-- In the Api Node it is now possible to filter for messages about plans. In addition, the plans are now also provided in the global context.
+- In the Api Node it is now possible to filter for messages about plans and homeegrams. In addition, plans and homeegrams are now also stored in the global context if configured.
 
 ## [0.8.2] - 2021-04-18
 ## Changed
