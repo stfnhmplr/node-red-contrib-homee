@@ -147,6 +147,50 @@ describe('homeeDevice Node', () => {
     });
   });
 
+  it('should only update attributes current value if a currentValue is provided', (done) => {
+    helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
+      const n2 = helper.getNode('n2');
+
+      n2.on('input', () => {
+        n2.attributes[0].current_value.should.equal(1);
+        n2.attributes[0].target_value.should.equal(0);
+        n2.attributes[0].last_changed.should.equal(Math.round(Date.now() / 1000));
+        done();
+      });
+
+      n2.receive({
+        payload: {
+          attribute: {
+            id: 1,
+            currentValue: 1,
+          },
+        },
+      });
+    });
+  });
+
+  it('should only update attributes target value if a targetValue is provided', (done) => {
+    helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
+      const n2 = helper.getNode('n2');
+
+      n2.on('input', () => {
+        n2.attributes[0].current_value.should.equal(0);
+        n2.attributes[0].target_value.should.equal(1);
+        n2.attributes[0].last_changed.should.not.equal(Math.round(Date.now() / 1000));
+        done();
+      });
+
+      n2.receive({
+        payload: {
+          attribute: {
+            id: 1,
+            targetValue: 1,
+          },
+        },
+      });
+    });
+  });
+
   it('should update the data property if provided', (done) => {
     helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
       const n2 = helper.getNode('n2');

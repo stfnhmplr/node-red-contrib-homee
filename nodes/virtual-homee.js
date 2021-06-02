@@ -72,7 +72,7 @@ module.exports = function (RED) {
       if (!deviceNode) {
         node.error(new Error(`Can't find device node with attribute id ${attributeId}`));
       } else {
-        deviceNode.updateAttribute(attributeId, targetValue);
+        deviceNode.updateAttribute({ id: attributeId, value: targetValue });
         deviceNode.send({ payload: { attributeId, targetValue } });
       }
     });

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.0] - 2021-06-xx
+## Added
+- Current and target value can now be set seperately from each other.
+
 ## [0.9.0] - 2021-04-28
 ## Changed
 - Some input fields have been replaced by typed inputs to allow the use of environment variables. Thus, subflows can now be used for device definition.

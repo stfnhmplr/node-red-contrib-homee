@@ -71,14 +71,10 @@ module.exports = function (RED) {
       Object.keys(msg.payload).forEach((key) => {
         switch (key) {
           case 'attribute':
-            this.updateAttribute(
-              msg.payload.attribute.id,
-              msg.payload.attribute.value,
-              msg.payload.attribute.data,
-            );
+            this.updateAttribute(msg.payload.attribute);
             break;
           case 'attributes':
-            msg.payload.attributes.forEach((a) => this.updateAttribute(a.id, a.value, a.data));
+            msg.payload.attributes.forEach((a) => this.updateAttribute(a));
             break;
           case 'state':
             this.updateNode(key, msg.payload[key]);
@@ -118,14 +114,30 @@ module.exports = function (RED) {
     };
 
     /**
-     * update attribute
-     * @param  {int} id  the attribute id
-     * @param  {int|float} value  new value
-     * @param  {string} data    new data
+     * Updates attribute data
+     * @param  {number} id
+     * @param  {number} value
+     * @param  {number} currentValue
+     * @param  {number} targetValue
+     * @param  {string} data
      * @return {void}
      */
-    this.updateAttribute = (id, value, data) => {
-      if (typeof id !== 'number' || (typeof value !== 'number' && typeof data === 'undefined')) {
+    this.updateAttribute = ({
+      id,
+      value,
+      currentValue,
+      targetValue,
+      data,
+    }) => {
+      if (typeof value === 'number') {
+        /* eslint-disable no-param-reassign */
+        currentValue = value;
+        targetValue = value;
+        /* eslint-enable no-param-reassign */
+      }
+
+      if (typeof id !== 'number' || (typeof currentValue !== 'number'
+          && typeof targetValue !== 'number' && data === undefined)) {
         node.warn(RED._('homeeDevice.warning.numeric-id-value'));
         return;
       }
@@ -143,28 +155,35 @@ module.exports = function (RED) {
         return;
       }
 
+      if (attribute.last_changed + 2 > unixTimestamp) {
+        node.debug(`Attribute #${id} was updated within the last two seconds.`);
+      }
+
       // save data if it is set
       if (typeof data === 'string') attribute.data = data;
 
-      if (typeof value === 'number') {
-        node.debug(`updating attribute #${id} to value: ${value}`);
+      if (typeof targetValue === 'number') {
+        node.debug(`updating attribute #${id} to target_value: ${targetValue}`);
 
-        if (value < attribute.minimum || value > attribute.maximum) {
+        if (targetValue < attribute.minimum || targetValue > attribute.maximum) {
           node.warn(`${RED._('homeeDevice.warning.value-exceeds-min-max')} ${attribute.minimum} ${RED._('homeeDevice.warning.and')} ${attribute.maximum}`);
           return;
         }
 
-        if (attribute.target_value === value && attribute.last_changed + 2 > unixTimestamp) {
-          node.debug(`Attribute #${id} was updated within the last two seconds.`);
+        attribute.target_value = targetValue;
+        this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
+      }
+
+      if (typeof currentValue === 'number') {
+        node.debug(`updating attribute #${id} to current_value: ${currentValue}`);
+
+        if (currentValue < attribute.minimum || currentValue > attribute.maximum) {
+          node.warn(`${RED._('homeeDevice.warning.value-exceeds-min-max')} ${attribute.minimum} ${RED._('homeeDevice.warning.and')} ${attribute.maximum}`);
+          return;
         }
 
-        // first update target value only
-        attribute.target_value = value;
-        this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
-
-        // next update current_value
         attribute.last_value = attribute.current_value;
-        attribute.current_value = value;
+        attribute.current_value = currentValue;
         attribute.last_changed = unixTimestamp;
         this.status({ fill: 'green', shape: 'dot', text: this.device.statusString(this.statusTemplate) });
       }
