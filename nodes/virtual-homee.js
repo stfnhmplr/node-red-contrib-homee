@@ -104,6 +104,23 @@ module.exports = function (RED) {
   RED.httpAdmin.get('/homee-api/template/:path', (req, res) => {
     res.json(templates.find(req.params.path));
   });
+  RED.httpAdmin.post('/homee-api/renew-token', (req, res) => {
+    if (!req.body.id) {
+      res.sendStatus(400);
+      return;
+    }
+
+    try {
+      const credentials = RED.nodes.getCredentials(req.body.id);
+      credentials.accessToken = crypto.randomBytes(12).toString('hex');
+      RED.nodes.addCredentials(req.body.id, credentials);
+      RED.log.debug(RED._('virtualHomee.info.token-renewed'));
+      res.sendStatus(200);
+    } catch (e) {
+      res.sendStatus(400);
+      RED.log.debug(`${RED._('virtualHomee.warning.token-not-renewed')}: ${e}`);
+    }
+  });
 
   RED.nodes.registerType('virtualHomee', VirtualHomeeNode, {
     credentials: {

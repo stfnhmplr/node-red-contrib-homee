@@ -90,7 +90,6 @@ describe('virtualHomee Node', () => {
     const flow = [{ id: 'n1', type: 'virtualHomee', name: 'virtualHomee' }];
 
     helper.load(virtualHomeeNode, flow, credentials, async () => {
-      // eslint-disable-next-line no-underscore-dangle
       helper.request()
         .get('/homee-api/enums')
         .expect(200)
@@ -107,7 +106,6 @@ describe('virtualHomee Node', () => {
     const flow = [{ id: 'n1', type: 'virtualHomee', name: 'virtualHomee' }];
 
     helper.load(virtualHomeeNode, flow, credentials, async () => {
-      // eslint-disable-next-line no-underscore-dangle
       helper.request()
         .get('/homee-api/icons')
         .expect(200)
@@ -115,6 +113,26 @@ describe('virtualHomee Node', () => {
           if (err) throw err;
 
           res.body.should.have.property('default', 'default');
+          done();
+        });
+    });
+  });
+
+  it('should update the access token on api request', (done) => {
+    const flow = [{ id: 'n1', type: 'virtualHomee', name: 'virtualHomee' }];
+
+    credentials.n1.accessToken = 'oldToken';
+
+    helper.load(virtualHomeeNode, flow, credentials, async () => {
+      helper.request()
+        .post('/homee-api/renew-token')
+        .send({ id: 'n1' })
+        .expect(200)
+        .end((err) => {
+          if (err) throw err;
+
+          const [[logEntry]] = helper.log().args.filter((e) => e[0].msg === 'virtualHomee.info.token-renewed');
+          logEntry.should.have.property('msg', 'virtualHomee.info.token-renewed');
           done();
         });
     });

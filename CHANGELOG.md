@@ -3,6 +3,7 @@
 ## [0.10.0] - 2021-06-xx
 ## Added
 - Current and target value can now be set seperately from each other.
+- The access token of your virtual homee can now be renewed from the Node-RED editor.
 
 ## [0.9.0] - 2021-04-28
 ## Changed

@@ -3,9 +3,17 @@
     "error": {
       "attributes-not-unique": "Attribute Ids must be unique!"
     },
+    "info": {
+      "token-renewed": "The access token has been renewed. Please deploy your changes."
+    },
+    "warning": {
+      "token-not-renewed": "The access token could not be renewed."
+    },
     "label": {
       "password": "Password",
-      "username": "Username"
+      "username": "Username",
+      "renewToken": "Renew access token",
+      "accessToken": "Access token"
     }
   }
 }

@@ -3,9 +3,17 @@
     "error": {
       "attributes-not-unique": "Die Attribut IDs dürfen nicht doppelt  vorkommen."
     },
+    "info": {
+      "token-renewed": "Der Access Token wurde erneuert. Bitte übernehme die Änderungen."
+    },
+    "warning": {
+      "token-not-renewed": "Der Access Token konnte nicht erneuert werden."
+    },
     "label": {
       "password": "Passwort",
-      "username": "Benutzername"
+      "username": "Benutzername",
+      "renewToken": "Access Token erneuern",
+      "accessToken": "Access Token"
     }
   }
 }
