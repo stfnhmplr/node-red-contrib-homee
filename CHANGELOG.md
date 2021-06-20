@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.10.0] - 2021-06-xx
+## [0.10.0] - 2021-06-20
 ## Added
 - Current and target value can now be set seperately from each other.
 - The access token of your virtual homee can now be renewed from the Node-RED editor.
