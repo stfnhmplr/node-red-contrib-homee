@@ -1,0 +1,17 @@
+{
+  "homeeLog": {
+    "label": {
+      "node-input": "Send a message to query the log",
+      "node-output": "Outputs log messages",
+      "name": "Name",
+      "output": "Output",
+      "raw": "Raw",
+      "array": "Array",
+      "collection": "Collection"
+    },
+    "status": {
+      "query": "Querying logfile...",
+      "error": "Could not query logfile"
+    }
+  }
+}

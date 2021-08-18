@@ -1,0 +1,42 @@
+<script type="text/javascript">
+  RED.nodes.registerType('homeeLog', {
+    category: 'homee',
+    color: '#a6bbcf',
+    defaults: {
+      homee: { value: '', type: 'homee' },
+      name: { value: 'homeeLog' },
+      output: { value: 'raw' },
+    },
+    icon: 'homee-logo.svg',
+    inputs: 1,
+    outputs: 1,
+    inputLabels: () => this._('homeeLog.label.node-input'),
+    outputLabels: () => this._('homeeLog.label.node-output'),
+    label: () => this.name || 'homeeLog',
+  });
+</script>
+
+<script type="text/x-red" data-template-name="homeeLog">
+    <div class="form-row">
+        <label for="node-input-homee">
+          <i class="fa fa-cube"></i> homee
+        </label>
+        <input type="text" id="node-input-homee" placeholder="homee" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-name">
+          <i class="fa fa-tag"></i> <span data-i18n="homeeLog.label.name"></span>
+        </label>
+        <input type="text" id="node-input-name" placeholder="homeeLog">
+    </div>
+    <div class="form-row">
+        <label for="node-input-output">
+          <i class="fa fa-arrow-right"></i> <span data-i18n="homeeLog.label.output"></span>
+        </label>
+        <select type="text" id="node-input-output" style="width: 70%;">
+          <option value="raw" data-i18n="homeeLog.label.raw"></option>
+          <option value="array" data-i18n="homeeLog.label.array"></option>
+          <option value="collection" data-i18n="homeeLog.label.collection"></option>
+        </select>
+    </div>
+</script>

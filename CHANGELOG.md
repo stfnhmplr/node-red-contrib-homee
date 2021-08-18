@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.11.0] -
+## Added
+- New homeeLogNode: Query the logfile from your homee and select between three different output formats.
+
 ## [0.10.0] - 2021-06-20
 ## Added
 - Current and target value can now be set seperately from each other.

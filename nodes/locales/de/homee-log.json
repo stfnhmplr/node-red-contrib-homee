@@ -1,0 +1,17 @@
+{
+  "homeeLog": {
+    "label": {
+      "node-input": "Sende eine Nachricht um das Logfile abzufragen",
+      "node-output": "Gibt die Nachrichten aus dem Log aus",
+      "name": "Name",
+      "output": "Ausgabe",
+      "raw": "Rohdaten",
+      "array": "Array",
+      "collection": "Collection"
+    },
+    "status": {
+      "query": "Logdatei abfragen...",
+      "error": "Die Logdatei konnte nicht abgerufen werden"
+    }
+  }
+}
