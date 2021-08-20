@@ -45,7 +45,7 @@ describe('homeeDevice Node', () => {
     });
   });
 
-  it('should warn if id and value is not numeric', (done) => {
+  it('should warn if id is not numeric', (done) => {
     helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
       const n2 = helper.getNode('n2');
 
@@ -58,7 +58,67 @@ describe('homeeDevice Node', () => {
         payload: {
           attribute: {
             id: 'not a number',
-            value: 'some random string',
+            value: 1,
+          },
+        },
+      });
+    });
+  });
+
+  it('should warn if value is not numeric', (done) => {
+    helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
+      const n2 = helper.getNode('n2');
+
+      n2.on('input', () => {
+        n2.warn.should.be.calledWithExactly('homeeDevice.warning.numeric-id-value');
+        done();
+      });
+
+      n2.receive({
+        payload: {
+          attribute: {
+            id: 10,
+            value: 'not a number',
+          },
+        },
+      });
+    });
+  });
+
+  it('should warn if id is NaN', (done) => {
+    helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
+      const n2 = helper.getNode('n2');
+
+      n2.on('input', () => {
+        n2.warn.should.be.calledWithExactly('homeeDevice.warning.numeric-id-value');
+        done();
+      });
+
+      n2.receive({
+        payload: {
+          attribute: {
+            id: NaN,
+            value: 1,
+          },
+        },
+      });
+    });
+  });
+
+  it('should warn if value is NaN', (done) => {
+    helper.load([virtualHomeeNode, homeeDeviceNode], defaultFlow, { n1: credentials }, () => {
+      const n2 = helper.getNode('n2');
+
+      n2.on('input', () => {
+        n2.warn.should.be.calledWithExactly('homeeDevice.warning.numeric-id-value');
+        done();
+      });
+
+      n2.receive({
+        payload: {
+          attribute: {
+            id: 10,
+            value: NaN,
           },
         },
       });

@@ -129,15 +129,15 @@ module.exports = function (RED) {
       targetValue,
       data,
     }) => {
-      if (typeof value === 'number') {
+      if (Number.isFinite(value)) {
         /* eslint-disable no-param-reassign */
         currentValue = value;
         targetValue = value;
         /* eslint-enable no-param-reassign */
       }
 
-      if (typeof id !== 'number' || (typeof currentValue !== 'number'
-          && typeof targetValue !== 'number' && data === undefined)) {
+      if (!Number.isFinite(id) || (!Number.isFinite(currentValue)
+          && !Number.isFinite(targetValue) && data === undefined)) {
         node.warn(RED._('homeeDevice.warning.numeric-id-value'));
         return;
       }
@@ -174,7 +174,7 @@ module.exports = function (RED) {
         this.virtualHomeeNode.api.send(JSON.stringify({ attribute }));
       }
 
-      if (typeof currentValue === 'number') {
+      if (Number.isFinite(currentValue)) {
         node.debug(`updating attribute #${id} to current_value: ${currentValue}`);
 
         if (currentValue < attribute.minimum || currentValue > attribute.maximum) {

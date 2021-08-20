@@ -3,6 +3,8 @@
 ## [0.11.0] -
 ## Added
 - New homeeLogNode: Query the logfile from your homee and select between three different output formats.
+## Changed
+- Bugfix: Infinity and NaN are now not longer valid id or values when sending a message to a homee device
 
 ## [0.10.0] - 2021-06-20
 ## Added
