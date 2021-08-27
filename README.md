@@ -10,9 +10,9 @@ npm install node-red-contrib-homee
 
 ## Usage
 
-This plugin provides two nodes (and two configuration nodes). The homeeApi-node
-is used to address the API of an existing homee. With the homeeDevice-node you
-can create virtual devices for your homee.
+This plugin provides three nodes (and two configuration nodes). The homeeApi node
+is used to address the API of an existing homee. With the homeeDevice node you
+can create virtual devices for your homee. The homeeLog node is used to query the logfile from your homee.
 
 ### homeeAPI
 
@@ -97,6 +97,11 @@ contextStorage: {
    }
 },
 ```
+
+### homeeLog
+Send any message to the homeeLog node to start querying the log file. Since the log file can only be queried as a whole, the query will take a few seconds.
+
+The output format can be selected in the settings. In addition to the output of the raw log data, the log file can be transformed to an array or a collection. The selection can be overwritten with `msg.output`. Valid values are `raw`, `array` and `collection`.
 
 ## About
 This plugin is not an official plugin. The homee device simulation is based on

@@ -1,0 +1,35 @@
+<script type="text/html" data-help-name="homeeLog">
+    <p>Querys the homee logfile</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt>homee <span class="property-type">node</span></dt>
+        <dd>Choose or create your virtual homee.</dd>
+        <dt>Name <span class="property-type">string</span></dt>
+        <dd>Choose a name or use the default one</dd>
+        <dt>Output <span class="property-type">option</span></dt>
+        <dd>Choose one of the given options. The logfile can be returned raw, array or collection (array of objects). Can be overwritten by <code>msg.output</code>. Valid values are <code>raw</code>, <code>array</code> and <code>collection</code>.</dd>
+    </dl>
+
+    <h3>Eingang</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type"></span></dt>
+        <dd>
+          <p>There are no params to filter the logfile while querying.</p>
+        </dd>
+    </dl>
+
+    <h3>Ausgang</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">String|Array|Collection</span></dt>
+        <dd>
+          <p>Depending on your configuration, the logfile is returned as string, array or collection.</p>
+        </dd>
+    </dl>
+
+    <h3>References</h3>
+    <p>You will find more usefull hints and instructions at
+        <a href="https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeLogNode" title="Node-RED Contrib homee Wiki">
+        https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeLogNode</a>
+    </p>
+</script>

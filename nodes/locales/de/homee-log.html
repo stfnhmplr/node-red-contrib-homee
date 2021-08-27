@@ -1,0 +1,35 @@
+<script type="text/html" data-help-name="homeeLog">
+    <p>Fragt die Logdatei des homee ab</p>
+
+    <h3>Konfiguration</h3>
+    <dl class="message-properties">
+        <dt>homee <span class="property-type">node</span></dt>
+        <dd>Wähle oder erstelle einen virtuellen homee</dd>
+        <dt>Name <span class="property-type">string</span></dt>
+        <dd>Vergib einen Namen oder verwende den Standardnamen</dd>
+        <dt>Ausgabe <span class="property-type">option</span></dt>
+        <dd>Wähle eine der verfügbaren Optionen zur Ausgabe aus. Die Logdatei kann im Ursprungszustand, als Array oder als Collection (Array von Objekten) ausgegeben werden. Kann mit <code>msg.output</code> überschrieben werden. Gültige Werte sind <code>raw</code>, <code>array</code> und <code>collection</code>.</dd>
+    </dl>
+
+    <h3>Eingang</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type"></span></dt>
+        <dd>
+          <p>Während der Abfrage besteht keine Möglichkeit die Daten zu filtern. Es muss immer die vollständige Logdatei abgefragt werden.</p>
+        </dd>
+    </dl>
+
+    <h3>Ausgang</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">String|Array|Collection</span></dt>
+        <dd>
+          <p>Die Logdatei wird je nach Konfiguration in Form von Rohdaten, eines Arrays oder einer Collection ausgegeben.</p>
+        </dd>
+    </dl>
+
+    <h3>Weitere Informationen</h3>
+    <p>Weitere Informationen gibt es im Wiki unter
+        <a href="https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeLogNode" title="Node-RED Contrib homee Wiki">
+        https://github.com/stfnhmplr/node-red-contrib-homee/wiki/homeeLogNode</a>
+    </p>
+</script>
