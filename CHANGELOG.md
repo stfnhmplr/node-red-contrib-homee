@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.11.0] -
+## [0.11.0] - 2021-08-27
 ## Added
 - New homeeLogNode: Query the logfile from your homee and select between three different output formats.
 ## Changed
