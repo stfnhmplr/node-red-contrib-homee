@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.10.0] - 2021-10-31
+## [0.12.0] - 2021-10-31
 ## Changed
 - Updated icons
 
