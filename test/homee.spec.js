@@ -6,9 +6,9 @@ const homeeNode = require('../nodes/homee');
 helper.init(require.resolve('node-red'));
 
 describe('homee Node', () => {
-  before(async () => { helper.startServer() });
-  after(async () => { helper.stopServer() });
-  afterEach(async () => { helper.unload() });
+  before(async () => { helper.startServer(); });
+  after(async () => { helper.stopServer(); });
+  afterEach(async () => { helper.unload(); });
 
   // eslint-disable-next-line
   const defaultFlow = [{ id: 'n1', type: 'homee', name: 'homee', device: 'NodeRedTest' }];

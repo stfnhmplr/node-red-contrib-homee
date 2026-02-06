@@ -16,9 +16,9 @@ helper.init(require.resolve('node-red'), {
 const credentials = { n1: { user: 'foo', pass: 'bar' } };
 
 describe('virtualHomee Node', () => {
-  before(async () => { helper.startServer() });
-  after(async () => { helper.stopServer() });
-  afterEach(async () => { helper.unload() });
+  before(async () => { helper.startServer(); });
+  after(async () => { helper.stopServer(); });
+  afterEach(async () => { helper.unload(); });
 
   it('should be loaded with correct defaults', (done) => {
     const flow = [{ id: 'n1', type: 'virtualHomee', name: 'virtualHomee' }];

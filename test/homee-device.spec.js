@@ -5,9 +5,9 @@ const homeeDeviceNode = require('../nodes/homee-device');
 helper.init(require.resolve('node-red'));
 
 describe('homeeDevice Node', () => {
-  before(async () => { helper.startServer() });
-  after(async () => { helper.stopServer() });
-  afterEach(async () => { helper.unload() });
+  before(async () => { helper.startServer(); });
+  after(async () => { helper.stopServer(); });
+  afterEach(async () => { helper.unload(); });
 
   // eslint-disable-next-line
   const defaultFlow = [{id: 'n2', type :"homeeDevice", 'virtual-homee': 'n1', name: 'TestDevice', nodeId: '1', 'showNodeId': true, profile: '10', icon: 'default', attributes: '[{"id": 1, "node_id": 1, "instance": 0, "minimum": 0, "maximum": 1, "current_value": 0, "target_value": 0, "last_value": 0, "unit": "", "step_value": 1, "editable": 1, "type": 1, "state": 1, "last_changed": 1572944008, "changed_by": 0, "changed_by_id": 0, "based_on": 1, "data": ""}]'}, {id: 'n1', type: 'virtualHomee', name: 'virtualHomee'}];
